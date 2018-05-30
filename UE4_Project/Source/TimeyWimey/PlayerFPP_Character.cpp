@@ -24,6 +24,11 @@ APlayerFPP_Character::APlayerFPP_Character()
 	FirstPersonCameraComponent->SetupAttachment(GetCapsuleComponent());
 	FirstPersonCameraComponent->RelativeLocation = CameraOffset;
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
+
+	/// Set up Movement Component
+	const bool EnableCrouch = true;
+	MovementComponent = GetCharacterMovement();
+	MovementComponent->NavAgentProps.bCanCrouch = EnableCrouch;
 }
 
 void APlayerFPP_Character::BeginPlay()
@@ -38,6 +43,9 @@ void APlayerFPP_Character::SetupPlayerInputComponent(class UInputComponent* Play
 
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
+	PlayerInputComponent->BindAction("CrouchHold", IE_Pressed, this, &APlayerFPP_Character::CharacterCrouch);
+	PlayerInputComponent->BindAction("CrouchHold", IE_Released, this, &APlayerFPP_Character::CharacterUnCrouch);
+	PlayerInputComponent->BindAction("CrouchToggle", IE_Pressed, this, &APlayerFPP_Character::CharacterCrouchToggle);
 	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerFPP_Character::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerFPP_Character::MoveRight);
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
@@ -58,4 +66,25 @@ void APlayerFPP_Character::MoveRight(float Value)
 	{
 		AddMovementInput(GetActorRightVector(), Value);
 	}
+}
+
+void APlayerFPP_Character::CharacterCrouch()
+{
+	if (MovementComponent->IsCrouching())
+		return;
+
+	MovementComponent->Crouch();
+}
+
+void APlayerFPP_Character::CharacterUnCrouch()
+{
+	if (!MovementComponent->IsCrouching())
+		return;
+
+	MovementComponent->UnCrouch();
+}
+
+void APlayerFPP_Character::CharacterCrouchToggle()
+{
+	MovementComponent->IsCrouching() ? MovementComponent->Crouch() : MovementComponent->UnCrouch();
 }

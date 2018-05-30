@@ -7,6 +7,7 @@
 #include "PlayerFPP_Character.generated.h"
 
 class UInputComponent;
+class UCharacterMovementComponent;
 
 UCLASS(config=Game)
 class APlayerFPP_Character : public ACharacter
@@ -28,13 +29,20 @@ protected:
 
 	virtual void BeginPlay();
 
-	// Handles moving forward/backward
+	/// Input Callbacks
+	// Move forward / backwards
 	void MoveForward(float Val);
-
-	// Handles strafing movement, left and right
+	// Move left / right
 	void MoveRight(float Val);
+	void CharacterCrouch();
+	void CharacterUnCrouch();
+	void CharacterCrouchToggle();
 	
 	// APawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
+
+private:
+
+	UCharacterMovementComponent* MovementComponent;
 
 };
