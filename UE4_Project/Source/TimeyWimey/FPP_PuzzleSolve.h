@@ -12,7 +12,9 @@ class AFPP_PuzzleSolve : public AGameModeBase
 	GENERATED_BODY()
 
 public:
+
 	AFPP_PuzzleSolve();
+
 };
 
 
