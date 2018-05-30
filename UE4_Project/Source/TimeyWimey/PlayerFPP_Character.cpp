@@ -1,7 +1,8 @@
 // Copyright 1998-2018 Epic Games, Inc. All Rights Reserved.
 
-#include "TimeyWimeyCharacter.h"
+#include "PlayerFPP_Character.h"
 
+#include "Engine/World.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
@@ -12,7 +13,7 @@ DEFINE_LOG_CATEGORY_STATIC(LogFPChar, Warning, All);
 //////////////////////////////////////////////////////////////////////////
 // ATimeyWimeyCharacter
 
-ATimeyWimeyCharacter::ATimeyWimeyCharacter()
+APlayerFPP_Character::APlayerFPP_Character()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
@@ -28,7 +29,7 @@ ATimeyWimeyCharacter::ATimeyWimeyCharacter()
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
 }
 
-void ATimeyWimeyCharacter::BeginPlay()
+void APlayerFPP_Character::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
@@ -37,9 +38,9 @@ void ATimeyWimeyCharacter::BeginPlay()
 //////////////////////////////////////////////////////////////////////////
 // Input
 
-void ATimeyWimeyCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
+void APlayerFPP_Character::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
-	// set up gameplay key bindings
+	// set up game play key bindings
 	check(PlayerInputComponent);
 
 	// Bind jump events
@@ -47,19 +48,19 @@ void ATimeyWimeyCharacter::SetupPlayerInputComponent(class UInputComponent* Play
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 
 	// Bind movement events
-	PlayerInputComponent->BindAxis("MoveForward", this, &ATimeyWimeyCharacter::MoveForward);
-	PlayerInputComponent->BindAxis("MoveRight", this, &ATimeyWimeyCharacter::MoveRight);
+	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerFPP_Character::MoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerFPP_Character::MoveRight);
 
 	// We have 2 versions of the rotation bindings to handle different kinds of devices differently
 	// "turn" handles devices that provide an absolute delta, such as a mouse.
-	// "turnrate" is for devices that we choose to treat as a rate of change, such as an analog joystick
+	// "turn rate" is for devices that we choose to treat as a rate of change, such as an analog joystick
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
-	PlayerInputComponent->BindAxis("TurnRate", this, &ATimeyWimeyCharacter::TurnAtRate);
+	PlayerInputComponent->BindAxis("TurnRate", this, &APlayerFPP_Character::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
-	PlayerInputComponent->BindAxis("LookUpRate", this, &ATimeyWimeyCharacter::LookUpAtRate);
+	PlayerInputComponent->BindAxis("LookUpRate", this, &APlayerFPP_Character::LookUpAtRate);
 }
 
-void ATimeyWimeyCharacter::MoveForward(float Value)
+void APlayerFPP_Character::MoveForward(float Value)
 {
 	if (Value != 0.0f)
 	{
@@ -68,7 +69,7 @@ void ATimeyWimeyCharacter::MoveForward(float Value)
 	}
 }
 
-void ATimeyWimeyCharacter::MoveRight(float Value)
+void APlayerFPP_Character::MoveRight(float Value)
 {
 	if (Value != 0.0f)
 	{
@@ -77,13 +78,13 @@ void ATimeyWimeyCharacter::MoveRight(float Value)
 	}
 }
 
-void ATimeyWimeyCharacter::TurnAtRate(float Rate)
+void APlayerFPP_Character::TurnAtRate(float Rate)
 {
 	// calculate delta for this frame from the rate information
 	AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
 }
 
-void ATimeyWimeyCharacter::LookUpAtRate(float Rate)
+void APlayerFPP_Character::LookUpAtRate(float Rate)
 {
 	// calculate delta for this frame from the rate information
 	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());

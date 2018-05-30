@@ -4,15 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
-#include "TimeyWimeyHUD.generated.h"
+#include "FPP_HUD.generated.h"
 
 UCLASS()
-class ATimeyWimeyHUD : public AHUD
+class AFPP_HUD : public AHUD
 {
 	GENERATED_BODY()
 
 public:
-	ATimeyWimeyHUD();
+	AFPP_HUD();
 
 	/** Primary draw call for the HUD */
 	virtual void DrawHUD() override;

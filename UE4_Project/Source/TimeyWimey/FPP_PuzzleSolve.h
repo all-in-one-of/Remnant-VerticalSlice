@@ -4,15 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
-#include "TimeyWimeyGameMode.generated.h"
+#include "FPP_PuzzleSolve.generated.h"
 
 UCLASS(minimalapi)
-class ATimeyWimeyGameMode : public AGameModeBase
+class AFPP_PuzzleSolve : public AGameModeBase
 {
 	GENERATED_BODY()
 
 public:
-	ATimeyWimeyGameMode();
+	AFPP_PuzzleSolve();
 };
 
 

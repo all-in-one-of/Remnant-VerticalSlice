@@ -1,13 +1,13 @@
 // Copyright 1998-2018 Epic Games, Inc. All Rights Reserved.
 
-#include "TimeyWimeyHUD.h"
+#include "FPP_HUD.h"
 #include "Engine/Canvas.h"
 #include "Engine/Texture2D.h"
 #include "TextureResource.h"
 #include "CanvasItem.h"
 #include "UObject/ConstructorHelpers.h"
 
-ATimeyWimeyHUD::ATimeyWimeyHUD()
+AFPP_HUD::AFPP_HUD()
 {
 	// Set the crosshair texture
 	static ConstructorHelpers::FObjectFinder<UTexture2D> CrosshairTexObj(TEXT("/Game/Textures/HUD/FirstPersonCrosshair"));
@@ -15,7 +15,7 @@ ATimeyWimeyHUD::ATimeyWimeyHUD()
 }
 
 
-void ATimeyWimeyHUD::DrawHUD()
+void AFPP_HUD::DrawHUD()
 {
 	Super::DrawHUD();
 

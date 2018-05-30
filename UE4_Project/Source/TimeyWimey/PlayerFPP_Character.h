@@ -4,12 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "TimeyWimeyCharacter.generated.h"
+#include "PlayerFPP_Character.generated.h"
 
 class UInputComponent;
 
 UCLASS(config=Game)
-class ATimeyWimeyCharacter : public ACharacter
+class APlayerFPP_Character : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -18,7 +18,7 @@ class ATimeyWimeyCharacter : public ACharacter
 	class UCameraComponent* FirstPersonCameraComponent;
 
 public:
-	ATimeyWimeyCharacter();
+	APlayerFPP_Character();
 
 protected:
 	virtual void BeginPlay();
