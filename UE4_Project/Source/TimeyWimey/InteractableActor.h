@@ -6,7 +6,9 @@
 #include "GameFramework/Actor.h"
 #include "InteractableActor.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnInteract);
+class UStaticMeshComponent;
+class USphereComponent;
+class UInteractComponent;
 
 UCLASS()
 class TIMEYWIMEY_API AInteractableActor : public AActor
@@ -17,14 +19,16 @@ public:
 
 	AInteractableActor();
 
-	virtual void Tick(float DeltaTime) override;
-
-	void OnInteract();
-
-	FOnInteract OnInteractEvent;
-
 protected:
 	
 	virtual void BeginPlay() override;
+
+private:
+
+	UPROPERTY(EditAnywhere)
+	USphereComponent* SphereComponent;
+
+	// This component should be added in C++, however, for some reason I cannot add blueprint event dispatcher from a component which is not added by blueprint. Fix this in future.
+	// UInteractComponent* InteractComponent;
 	
 };
