@@ -38,7 +38,8 @@ protected:
 	void CharacterCrouch();
 	void CharacterUnCrouch();
 	void CharacterCrouchToggle();
-	
+	void Traverse_Dimension();
+
 	// APawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
 
