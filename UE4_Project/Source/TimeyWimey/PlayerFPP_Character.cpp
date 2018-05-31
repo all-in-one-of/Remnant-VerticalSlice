@@ -47,7 +47,7 @@ void APlayerFPP_Character::SetupPlayerInputComponent(class UInputComponent* Play
 	PlayerInputComponent->BindAction("CrouchHold", IE_Pressed, this, &APlayerFPP_Character::CharacterCrouch);
 	PlayerInputComponent->BindAction("CrouchHold", IE_Released, this, &APlayerFPP_Character::CharacterUnCrouch);
 	PlayerInputComponent->BindAction("CrouchToggle", IE_Pressed, this, &APlayerFPP_Character::CharacterCrouchToggle);
-	PlayerInputComponent->BindAction("SwitchCamera", IE_Pressed, this, &APlayerFPP_Character::SwitchCameras);
+	//PlayerInputComponent->BindAction("SwitchCameras", IE_Pressed, this, &APlayerFPP_Character::Traverse_Dimension);
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerFPP_Character::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerFPP_Character::MoveRight);
@@ -92,16 +92,9 @@ void APlayerFPP_Character::CharacterCrouchToggle()
 	MovementComponent->IsCrouching() ? MovementComponent->Crouch() : MovementComponent->UnCrouch();
 }
 
-void APlayerFPP_Character::SwitchCameras()
+void APlayerFPP_Character::Traverse_Dimension()
 {
 	// Get player controller
-	APlayerController* controller = UGameplayStatics::GetPlayerController(this, 0);
+	//APlayerController* controller = UGameplayStatics::GetPlayerController(this, 0);
 
-	if (controller)
-	{
-		if (controller->GetViewTarget() != main_camera && main_camera != nullptr)
-			controller->SetViewTarget(main_camera);
-		if (controller->GetViewTarget() != second_camera && second_camera != nullptr)
-			controller->SetViewTarget(second_camera);
-	}
 }

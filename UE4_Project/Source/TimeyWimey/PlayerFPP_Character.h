@@ -25,12 +25,6 @@ public:
 	// Returns FirstPersonCameraComponent sub object
 	FORCEINLINE class UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
-	UPROPERTY(EditAnywhere)
-		AActor* main_camera;
-
-	UPROPERTY(EditAnywhere)
-		AActor* second_camera;
-
 protected:
 
 	virtual void BeginPlay();
@@ -43,7 +37,7 @@ protected:
 	void CharacterCrouch();
 	void CharacterUnCrouch();
 	void CharacterCrouchToggle();
-	void SwitchCameras();
+	void Traverse_Dimension();
 
 	// APawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
