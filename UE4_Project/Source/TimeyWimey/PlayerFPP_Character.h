@@ -8,6 +8,7 @@
 
 class UInputComponent;
 class UCharacterMovementComponent;
+class UInteractorComponent;
 
 UCLASS(config=Game)
 class APlayerFPP_Character : public ACharacter
@@ -43,6 +44,9 @@ protected:
 
 private:
 
+	void OnInteract();
+
 	UCharacterMovementComponent* MovementComponent;
+	UInteractorComponent* InteractorComponent;
 
 };
