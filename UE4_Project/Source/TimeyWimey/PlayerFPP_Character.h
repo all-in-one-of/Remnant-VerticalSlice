@@ -9,6 +9,13 @@
 class UInputComponent;
 class UCharacterMovementComponent;
 class UInteractorComponent;
+class UTeleportComponent;
+
+enum class EDimension
+{
+	LOWER,
+	UPPER
+};
 
 UCLASS(config=Game)
 class APlayerFPP_Character : public ACharacter
@@ -26,6 +33,9 @@ public:
 	// Returns FirstPersonCameraComponent sub object
 	FORCEINLINE class UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
+	EDimension GetDimension() { return dimension; }
+	void SetDimension(EDimension new_dimension) { dimension = new_dimension; }
+
 protected:
 
 	virtual void BeginPlay();
@@ -38,7 +48,6 @@ protected:
 	void CharacterCrouch();
 	void CharacterUnCrouch();
 	void CharacterCrouchToggle();
-	void Traverse_Dimension();
 
 	// APawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
@@ -46,8 +55,12 @@ protected:
 private:
 
 	void OnInteract();
+	UInteractorComponent* InteractorComponent;
 
 	UCharacterMovementComponent* MovementComponent;
-	UInteractorComponent* InteractorComponent;
+
+	EDimension dimension;
+	void TraverseDimension();
+	UTeleportComponent* teleport_component;
 
 };
