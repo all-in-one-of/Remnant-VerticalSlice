@@ -14,6 +14,5 @@ void UInteractComponent::BeginPlay()
 
 void UInteractComponent::RequestInteract()
 {
-	UE_LOG(LogTemp, Warning, TEXT("My god it worked, it actually worked!"))
 	OnInteractRequset.Broadcast();
 }
