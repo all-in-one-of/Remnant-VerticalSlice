@@ -8,7 +8,7 @@
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/InputSettings.h"
-#include "Kismet/GameplayStatics.h"
+#include "InteractorComponent.h"
 
 APlayerFPP_Character::APlayerFPP_Character()
 {
@@ -18,7 +18,7 @@ APlayerFPP_Character::APlayerFPP_Character()
 
 	GetCapsuleComponent()->InitCapsuleSize(CapsuleRadius, CapsuleHeight);
 
-	/// Set up camera component
+	/// Set up Camera Component
 	const FVector CameraOffset(-39.56f, 1.75f, 64.f);
 
 	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
@@ -30,6 +30,11 @@ APlayerFPP_Character::APlayerFPP_Character()
 	const bool EnableCrouch = true;
 	MovementComponent = GetCharacterMovement();
 	MovementComponent->NavAgentProps.bCanCrouch = EnableCrouch;
+
+	/// Set up Interactor Component
+	FName InteractorComponentName = TEXT("InteractorComponent");
+
+	InteractorComponent = CreateDefaultSubobject<UInteractorComponent>(InteractorComponentName);
 }
 
 void APlayerFPP_Character::BeginPlay()
@@ -42,13 +47,12 @@ void APlayerFPP_Character::SetupPlayerInputComponent(class UInputComponent* Play
 	// set up game play key bindings
 	check(PlayerInputComponent);
 
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerFPP_Character::OnInteract);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	PlayerInputComponent->BindAction("CrouchHold", IE_Pressed, this, &APlayerFPP_Character::CharacterCrouch);
 	PlayerInputComponent->BindAction("CrouchHold", IE_Released, this, &APlayerFPP_Character::CharacterUnCrouch);
 	PlayerInputComponent->BindAction("CrouchToggle", IE_Pressed, this, &APlayerFPP_Character::CharacterCrouchToggle);
-	//PlayerInputComponent->BindAction("SwitchCameras", IE_Pressed, this, &APlayerFPP_Character::Traverse_Dimension);
-
 	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerFPP_Character::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerFPP_Character::MoveRight);
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
@@ -92,9 +96,7 @@ void APlayerFPP_Character::CharacterCrouchToggle()
 	MovementComponent->IsCrouching() ? MovementComponent->Crouch() : MovementComponent->UnCrouch();
 }
 
-void APlayerFPP_Character::Traverse_Dimension()
+void APlayerFPP_Character::OnInteract()
 {
-	// Get player controller
-	//APlayerController* controller = UGameplayStatics::GetPlayerController(this, 0);
-
+	InteractorComponent->AttemptInteract();
 }
