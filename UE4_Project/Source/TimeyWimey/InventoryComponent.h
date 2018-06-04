@@ -4,31 +4,28 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "InteractorComponent.generated.h"
+#include "InventoryComponent.generated.h"
 
-class USphereComponent;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class TIMEYWIMEY_API UInteractorComponent : public UActorComponent
+class TIMEYWIMEY_API UInventoryComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	
-	UInteractorComponent();
+	UInventoryComponent();
 
-	void AttemptInteract();
-
-	UFUNCTION(BlueprintCallable)
-	void OnSuccesfulInteract();
+	bool HasItem(FName ItemName) const;
+	void AddItem(FName ItemName);
+	void RemoveItem(FName ItemName);
 
 protected:
 	
 	virtual void BeginPlay() override;
 
-private:	
+private:
 
-	UPROPERTY(EditAnywhere)
-	float InteractRange;
-
+	TArray<FName> Inventory;
+	
 };

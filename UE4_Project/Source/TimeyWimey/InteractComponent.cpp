@@ -12,7 +12,7 @@ void UInteractComponent::BeginPlay()
 	Super::BeginPlay();
 }
 
-void UInteractComponent::RequestInteract()
+void UInteractComponent::RequestInteract(AActor* Interactor)
 {
-	OnInteractRequset.Broadcast();
+	OnInteractRequest.Broadcast(Interactor);
 }
