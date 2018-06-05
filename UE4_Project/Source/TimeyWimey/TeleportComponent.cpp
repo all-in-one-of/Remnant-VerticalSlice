@@ -105,6 +105,7 @@ void UTeleportComponent::DenyTeleport()
 	const float duration(3.0f);
 	bool draw_shadow(true);
 
+	// TODO: Change debug to actual text rendering. AHUD::DrawText
 	DrawDebugString(GEngine->GetWorldFromContextObject(this, EGetWorldErrorMode::ReturnNull), player->GetActorLocation(), *FString(TEXT("Something is blocking your way")), NULL, color, duration, draw_shadow);
 }
 
