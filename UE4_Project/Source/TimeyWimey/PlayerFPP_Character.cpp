@@ -9,6 +9,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/InputSettings.h"
 #include "InteractorComponent.h"
+#include "InventoryComponent.h"
 
 APlayerFPP_Character::APlayerFPP_Character()
 {
@@ -35,6 +36,11 @@ APlayerFPP_Character::APlayerFPP_Character()
 	FName InteractorComponentName = TEXT("InteractorComponent");
 
 	InteractorComponent = CreateDefaultSubobject<UInteractorComponent>(InteractorComponentName);
+
+	/// Set up Inventory Component
+	FName InventoryComponentName = TEXT("InventoryComponent");
+
+	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(InventoryComponentName);
 }
 
 void APlayerFPP_Character::BeginPlay()

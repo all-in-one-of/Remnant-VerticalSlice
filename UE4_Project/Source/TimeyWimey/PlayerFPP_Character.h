@@ -9,6 +9,7 @@
 class UInputComponent;
 class UCharacterMovementComponent;
 class UInteractorComponent;
+class UInventoryComponent;
 
 UCLASS(config=Game)
 class APlayerFPP_Character : public ACharacter
@@ -49,5 +50,6 @@ private:
 
 	UCharacterMovementComponent* MovementComponent;
 	UInteractorComponent* InteractorComponent;
+	UInventoryComponent* InventoryComponent;
 
 };
