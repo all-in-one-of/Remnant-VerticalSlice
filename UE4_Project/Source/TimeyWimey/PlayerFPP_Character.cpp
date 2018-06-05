@@ -10,6 +10,8 @@
 #include "GameFramework/InputSettings.h"
 #include "InteractorComponent.h"
 #include "InventoryComponent.h"
+#include "TeleportComponent.h"
+
 
 APlayerFPP_Character::APlayerFPP_Character()
 {
@@ -41,6 +43,12 @@ APlayerFPP_Character::APlayerFPP_Character()
 	FName InventoryComponentName = TEXT("InventoryComponent");
 
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(InventoryComponentName);
+
+	/// Set up Teleport Component
+	FName TeleportComponentName = TEXT("TeleportComponent");
+
+	teleport_component = CreateDefaultSubobject<UTeleportComponent>(TeleportComponentName);
+
 }
 
 void APlayerFPP_Character::BeginPlay()
@@ -54,11 +62,14 @@ void APlayerFPP_Character::SetupPlayerInputComponent(class UInputComponent* Play
 	check(PlayerInputComponent);
 
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerFPP_Character::OnInteract);
+	PlayerInputComponent->BindAction("TraverseDimension", IE_Pressed, this, &APlayerFPP_Character::TraverseDimension);
+
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
 	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::StopJumping);
 	PlayerInputComponent->BindAction("CrouchHold", IE_Pressed, this, &APlayerFPP_Character::CharacterCrouch);
 	PlayerInputComponent->BindAction("CrouchHold", IE_Released, this, &APlayerFPP_Character::CharacterUnCrouch);
 	PlayerInputComponent->BindAction("CrouchToggle", IE_Pressed, this, &APlayerFPP_Character::CharacterCrouchToggle);
+
 	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerFPP_Character::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerFPP_Character::MoveRight);
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
@@ -105,4 +116,9 @@ void APlayerFPP_Character::CharacterCrouchToggle()
 void APlayerFPP_Character::OnInteract()
 {
 	InteractorComponent->AttemptInteract();
+}
+
+void APlayerFPP_Character::TraverseDimension()
+{
+	teleport_component->TraverseDimension();
 }
