@@ -63,7 +63,9 @@ void UTeleportComponent::TraverseDimension()
 	trace_params.bReturnPhysicalMaterial = false;
 
 	TArray<FHitResult> hit;
+	
 	// TODO: Add screen shake / fade before teleporting
+	// TODO: Change line trace to capsule trace
 
 	if (dimension == EDimension::LOWER)
 	{
