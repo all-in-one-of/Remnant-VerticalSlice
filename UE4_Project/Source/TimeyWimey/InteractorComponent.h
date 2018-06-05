@@ -19,9 +19,6 @@ public:
 
 	void AttemptInteract();
 
-	UFUNCTION(BlueprintCallable)
-	void OnSuccesfulInteract();
-
 protected:
 	
 	virtual void BeginPlay() override;

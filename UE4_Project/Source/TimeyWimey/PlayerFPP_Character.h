@@ -9,6 +9,7 @@
 class UInputComponent;
 class UCharacterMovementComponent;
 class UInteractorComponent;
+class UInventoryComponent;
 class UTeleportComponent;
 
 enum class EDimension
@@ -53,14 +54,16 @@ protected:
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
 
 private:
-
+	
+	void TraverseDimension();
 	void OnInteract();
-	UInteractorComponent* InteractorComponent;
 
+	UInteractorComponent* InteractorComponent;
 	UCharacterMovementComponent* MovementComponent;
+	UInteractorComponent* InteractorComponent;
+	UInventoryComponent* InventoryComponent;
+	UTeleportComponent* teleport_component;
 
 	EDimension dimension;
-	void TraverseDimension();
-	UTeleportComponent* teleport_component;
 
 };

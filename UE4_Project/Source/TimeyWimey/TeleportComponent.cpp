@@ -14,6 +14,8 @@
 #include "../Engine/Classes/GameFramework/Character.h"
 #include "../Engine/Classes/Components/SphereComponent.h"
 #include "../Engine/Classes/Components/CapsuleComponent.h"
+#include "FPP_HUD.h"
+#include "../Engine/Classes/GameFramework/HUD.h"
 
 // Sets default values for this component's properties
 UTeleportComponent::UTeleportComponent()
@@ -114,6 +116,9 @@ void UTeleportComponent::DenyTeleport()
 	bool draw_shadow(true);
 
 	// TODO: Change debug to actual text rendering. AHUD::DrawText
-	DrawDebugString(GEngine->GetWorldFromContextObject(this, EGetWorldErrorMode::ReturnNull), player->GetActorLocation(), *FString(TEXT("Something is blocking your way")), NULL, color, duration, draw_shadow);
+	//DrawDebugString(GEngine->GetWorldFromContextObject(this, EGetWorldErrorMode::ReturnNull), player->GetActorLocation(), *FString(TEXT("Something is blocking your way")), NULL, color, duration, draw_shadow);
+	GEngine->AddOnScreenDebugMessage(-1, 3.0f, color, TEXT("Something is blocking your way"));
+	//UCanvas* canvas = GetWorld()->GetCanvasForDrawMaterialToRenderTarget();
+	//canvas->DrawItem(AFPP_HUD::DrawText2D(TEXT("LOL"), 0.0f, 0.0f, color, 1.0f, DEFAULT_GUI_FONT));
 }
 

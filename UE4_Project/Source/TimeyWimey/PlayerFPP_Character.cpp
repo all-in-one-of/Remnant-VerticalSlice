@@ -9,7 +9,9 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/InputSettings.h"
 #include "InteractorComponent.h"
+#include "InventoryComponent.h"
 #include "TeleportComponent.h"
+
 
 APlayerFPP_Character::APlayerFPP_Character()
 {
@@ -32,9 +34,21 @@ APlayerFPP_Character::APlayerFPP_Character()
 	MovementComponent = GetCharacterMovement();
 	MovementComponent->NavAgentProps.bCanCrouch = EnableCrouch;
 
-	// Setup sub components
-	InteractorComponent = CreateDefaultSubobject<UInteractorComponent>(TEXT("InteractorComponent"));
-	teleport_component = CreateDefaultSubobject<UTeleportComponent>(TEXT("TeleportComponent"));
+	/// Set up Interactor Component
+	FName InteractorComponentName = TEXT("InteractorComponent");
+
+	InteractorComponent = CreateDefaultSubobject<UInteractorComponent>(InteractorComponentName);
+
+	/// Set up Inventory Component
+	FName InventoryComponentName = TEXT("InventoryComponent");
+
+	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(InventoryComponentName);
+
+	/// Set up Teleport Component
+	FName TeleportComponentName = TEXT("TeleportComponent");
+
+	teleport_component = CreateDefaultSubobject<UTeleportComponent>(TeleportComponentName);
+
 }
 
 void APlayerFPP_Character::BeginPlay()

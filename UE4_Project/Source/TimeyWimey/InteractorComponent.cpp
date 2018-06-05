@@ -6,7 +6,9 @@
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/Actor.h"
 #include "InteractableActor.h"
+#include "PickupActor.h"
 #include "InteractComponent.h"
+#include "InventoryComponent.h"
 
 #define OUT
 
@@ -53,13 +55,23 @@ void UInteractorComponent::AttemptInteract()
 
 			if (InteractComponent)
 			{
-				InteractComponent->RequestInteract(GetOwner());
+				/// Add to inventory
+				if (InteractableActor->GetInteractableType() == EInteractableType::INTERACTABLE_PICK_UP)
+				{
+					UInventoryComponent* Inventory = GetOwner()->FindComponentByClass<UInventoryComponent>();
+					APickUpActor* PickUp = Cast<APickUpActor>(InteractableActor);
+
+					if (Inventory && PickUp)
+					{
+						Inventory->AddItem(PickUp->GetName());
+						InteractComponent->RequestInteract();
+					}
+				}
+				else
+				{
+					InteractComponent->RequestInteract();
+				}
 			}
 		}
 	}
-}
-
-void UInteractorComponent::OnSuccesfulInteract()
-{
-	
 }
