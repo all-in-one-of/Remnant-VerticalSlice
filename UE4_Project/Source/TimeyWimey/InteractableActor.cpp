@@ -21,11 +21,10 @@ AInteractableActor::AInteractableActor()
 	SphereComponent->SetupAttachment(RootComponent);	
 	RootComponent = SphereComponent;
 
-	// This component should be added in C++, however, for some reason I cannot add blueprint event dispatcher from a component which is not added by blueprint. Fix this in future.
-	/*/// Set up Interact Component
+	/// Set up Interact Component
 	FName InteractComponentName = TEXT("InteractComponent");
 
-	InteractComponent = CreateDefaultSubobject<UInteractComponent>(InteractComponentName);*/
+	InteractComponent = CreateDefaultSubobject<UInteractComponent>(InteractComponentName);
 }
 
 void AInteractableActor::BeginPlay()

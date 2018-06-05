@@ -53,8 +53,13 @@ void UInteractorComponent::AttemptInteract()
 
 			if (InteractComponent)
 			{
-				InteractComponent->RequestInteract();
+				InteractComponent->RequestInteract(GetOwner());
 			}
 		}
 	}
+}
+
+void UInteractorComponent::OnSuccesfulInteract()
+{
+	
 }
