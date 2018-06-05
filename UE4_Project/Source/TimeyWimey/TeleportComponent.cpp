@@ -6,10 +6,14 @@
 #include "PlayerFPP_Character.h"
 #include "../Engine/Classes/Components/PrimitiveComponent.h"
 #include "../Engine/Classes/Engine/CollisionProfile.h"
+#include "../Engine/Public/WorldCollision.h"
 #include "../Engine/Classes/Engine/World.h"
 #include "../Engine/Classes/Engine/Engine.h"
 #include "../Engine/Public/DrawDebugHelpers.h"
 #include "../Engine/Classes/GameFramework/HUD.h"
+#include "../Engine/Classes/GameFramework/Character.h"
+#include "../Engine/Classes/Components/SphereComponent.h"
+#include "../Engine/Classes/Components/CapsuleComponent.h"
 
 // Sets default values for this component's properties
 UTeleportComponent::UTeleportComponent()
@@ -57,15 +61,19 @@ void UTeleportComponent::TraverseDimension()
 	EDimension dimension = player->GetDimension();
 
 	// Setup trace params
-	FCollisionQueryParams trace_params(TEXT(""), true, player);
-	trace_params.bTraceComplex = true;
-	trace_params.bTraceAsyncScene = true;
-	trace_params.bReturnPhysicalMaterial = false;
+	FCollisionQueryParams query_params(TEXT(""), true, player);
+	query_params.bTraceComplex = true;
+	query_params.bTraceAsyncScene = true;
+	query_params.bReturnPhysicalMaterial = false;
 
-	TArray<FHitResult> hit;
-	
+
+	FHitResult hit;
+
+	const FVector extent(player->GetCapsuleComponent()->GetCollisionShape().Capsule.Radius);
+	const FCollisionShape shape = FCollisionShape::MakeCapsule(extent);
+	const FQuat quat = FQuat(player->GetActorRotation());
+
 	// TODO: Add screen shake / fade before teleporting
-	// TODO: Change line trace to capsule trace
 
 	if (dimension == EDimension::LOWER)
 	{
@@ -73,8 +81,8 @@ void UTeleportComponent::TraverseDimension()
 		trace_end.Z += trace_length;
 		new_pos.Z += teleport_amount;
 
-		// Trace against trace channel 3 (Prop_D2), if it doesn't hit anything, teleport
-		if (!GetWorld()->LineTraceMultiByObjectType(hit, player_pos, trace_end, ECC_GameTraceChannel3, trace_params))
+		// Capsule trace against D2 objects, if nothing is hit, teleport
+		if (!GetWorld()->SweepSingleByObjectType(hit, player_pos, trace_end, quat, ECC_GameTraceChannel3, shape, query_params))
 		{
 			Teleport(dimension, new_pos);
 			return;
@@ -86,8 +94,8 @@ void UTeleportComponent::TraverseDimension()
 		trace_end.Z -= trace_length;
 		new_pos.Z -= teleport_amount;
 
-		// Trace against trace channel 2 (Prop_D1), if it doesn't hit anything, teleport
-		if (!GetWorld()->LineTraceMultiByObjectType(hit, player_pos, trace_end, ECC_GameTraceChannel2, trace_params))
+		// Capsule trace against D1 objects, if nothing is hit, teleport
+		if (!GetWorld()->SweepSingleByObjectType(hit, player_pos, trace_end, quat, ECC_GameTraceChannel2, shape, query_params))
 		{
 			Teleport(dimension, new_pos);
 			return;
