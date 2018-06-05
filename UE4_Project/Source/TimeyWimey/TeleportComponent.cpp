@@ -7,6 +7,9 @@
 #include "../Engine/Classes/Components/PrimitiveComponent.h"
 #include "../Engine/Classes/Engine/CollisionProfile.h"
 #include "../Engine/Classes/Engine/World.h"
+#include "../Engine/Classes/Engine/Engine.h"
+#include "../Engine/Public/DrawDebugHelpers.h"
+#include "../Engine/Classes/GameFramework/HUD.h"
 
 // Sets default values for this component's properties
 UTeleportComponent::UTeleportComponent()
@@ -30,47 +33,76 @@ void UTeleportComponent::Teleport(EDimension dimension, const FVector location)
 {
 	auto player = Cast<APlayerFPP_Character>(GetOwner());
 	player->SetActorLocation(location);
-	player->SetDimension(dimension);
+
+	// Set the new dimension to the not active dimension
+	EDimension new_dimension = player->GetDimension() == EDimension::LOWER ? EDimension::UPPER : EDimension::LOWER;
+	player->SetDimension(new_dimension);
+
+	UE_LOG(LogTemp, Warning, TEXT("Teleporting player to position: %s"), *location.ToString());
 }
 
 void UTeleportComponent::TraverseDimension()
 {
-	// Get Player
+	// Get Player & pos
 	auto player = Cast<APlayerFPP_Character>(GetOwner());
 	const FVector player_pos = player->GetActorLocation();
-	static const float teleport_amount = 10000.0f;
 
-	FCollisionQueryParams trace_params;
+	// Set some constants
+	static const float teleport_amount = 10000.0f;
+	static const float trace_length = 10500.0f;
+
+	// Create needed variables and default them
+	FVector new_pos = player_pos;
 	FVector trace_end = player_pos;
 	EDimension dimension = player->GetDimension();
 
+	// Setup trace params
+	FCollisionQueryParams trace_params(TEXT(""), true, player);
+	trace_params.bTraceComplex = true;
+	trace_params.bTraceAsyncScene = true;
+	trace_params.bReturnPhysicalMaterial = false;
+
+	TArray<FHitResult> hit;
+	// TODO: Add screen shake / fade before teleporting
+
 	if (dimension == EDimension::LOWER)
 	{
-		// Setup trace params
-		trace_params = FCollisionQueryParams(FName(TEXT("Prop_D2")), true, player);
-		trace_params.bTraceComplex = true;
-		trace_params.bTraceAsyncScene = true;
-		trace_params.bReturnPhysicalMaterial = false;
+		// Increase trace end and new pos
+		trace_end.Z += trace_length;
+		new_pos.Z += teleport_amount;
 
-		trace_end.Z += teleport_amount;
-		dimension = EDimension::UPPER;
+		// Trace against trace channel 3 (Prop_D2), if it doesn't hit anything, teleport
+		if (!GetWorld()->LineTraceMultiByObjectType(hit, player_pos, trace_end, ECC_GameTraceChannel3, trace_params))
+		{
+			Teleport(dimension, new_pos);
+			return;
+		}
 	}
 	else
 	{
-		// Setup trace params
-		trace_params = FCollisionQueryParams(FName(TEXT("Prop_D1")), true, player);
-		trace_params.bTraceComplex = true;
-		trace_params.bTraceAsyncScene = true;
-		trace_params.bReturnPhysicalMaterial = false;
+		// Decrease trace end and new pos
+		trace_end.Z -= trace_length;
+		new_pos.Z -= teleport_amount;
 
-		trace_end.Z -= teleport_amount;
-		dimension = EDimension::LOWER;
+		// Trace against trace channel 2 (Prop_D1), if it doesn't hit anything, teleport
+		if (!GetWorld()->LineTraceMultiByObjectType(hit, player_pos, trace_end, ECC_GameTraceChannel2, trace_params))
+		{
+			Teleport(dimension, new_pos);
+			return;
+		}
 	}
 
-	TArray<FHitResult> hit;
-	if (!GetWorld()->LineTraceMultiByObjectType(hit, player_pos, trace_end, ECC_WorldStatic, trace_params))
-		Teleport(dimension, trace_end);
+	// If the ray hit something, pop text to the screen
+	DenyTeleport();
+}
 
-	// TODO: Add screen shake / fade before teleporting
+void UTeleportComponent::DenyTeleport()
+{
+	auto player = Cast<APlayerFPP_Character>(GetOwner());
+	const FColor color = FLinearColor(1.0f, 1.0f, 1.0f, 1.0f).ToFColor(true);
+	const float duration(3.0f);
+	bool draw_shadow(true);
+
+	DrawDebugString(GEngine->GetWorldFromContextObject(this, EGetWorldErrorMode::ReturnNull), player->GetActorLocation(), *FString(TEXT("Something is blocking your way")), NULL, color, duration, draw_shadow);
 }
 

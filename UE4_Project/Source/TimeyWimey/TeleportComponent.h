@@ -19,6 +19,7 @@ public:
 	UTeleportComponent();
 
 	void TraverseDimension();
+	void DenyTeleport();
 
 protected:
 	virtual void BeginPlay() override;
