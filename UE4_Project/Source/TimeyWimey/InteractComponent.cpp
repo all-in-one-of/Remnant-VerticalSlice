@@ -12,8 +12,7 @@ void UInteractComponent::BeginPlay()
 	Super::BeginPlay();
 }
 
-void UInteractComponent::RequestInteract()
+void UInteractComponent::RequestInteract(AActor* Interactor)
 {
-	UE_LOG(LogTemp, Warning, TEXT("My god it worked, it actually worked!"))
-	OnInteractRequset.Broadcast();
+	OnInteractRequest.Broadcast(Interactor);
 }

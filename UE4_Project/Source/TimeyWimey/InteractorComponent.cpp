@@ -46,11 +46,20 @@ void UInteractorComponent::AttemptInteract()
 	if (HitResult.GetActor())
 	{
 		AInteractableActor* InteractableActor = Cast<AInteractableActor>(HitResult.GetActor());
-		UInteractComponent* InteractComponent = InteractableActor->FindComponentByClass<UInteractComponent>();
 
-		if (InteractComponent)
+		if (InteractableActor)
 		{
-			InteractComponent->RequestInteract();
+			UInteractComponent* InteractComponent = InteractableActor->FindComponentByClass<UInteractComponent>();
+
+			if (InteractComponent)
+			{
+				InteractComponent->RequestInteract(GetOwner());
+			}
 		}
 	}
+}
+
+void UInteractorComponent::OnSuccesfulInteract()
+{
+	
 }

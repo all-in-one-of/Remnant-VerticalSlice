@@ -23,12 +23,12 @@ protected:
 	
 	virtual void BeginPlay() override;
 
+	UPROPERTY(BlueprintReadWrite)
+	UInteractComponent* InteractComponent;
+
 private:
 
 	UPROPERTY(EditAnywhere)
 	USphereComponent* SphereComponent;
-
-	// This component should be added in C++, however, for some reason I cannot add blueprint event dispatcher from a component which is not added by blueprint. Fix this in future.
-	// UInteractComponent* InteractComponent;
 	
 };
