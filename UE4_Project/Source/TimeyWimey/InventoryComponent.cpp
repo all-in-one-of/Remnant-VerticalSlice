@@ -16,18 +16,24 @@ bool UInventoryComponent::HasItem(FName ItemName) const
 	return Inventory.Contains(ItemName);
 }
 
-void UInventoryComponent::AddItem(FName ItemName)
+bool UInventoryComponent::AddItem(FName ItemName)
 {
 	if (!HasItem(ItemName))
-	{
+	{		
 		Inventory.Add(ItemName);
+		return true;
 	}
+
+	return false;
 }
 
-void UInventoryComponent::RemoveItem(FName ItemName)
+bool UInventoryComponent::RemoveItem(FName ItemName)
 {
 	if (HasItem(ItemName))
 	{
 		Inventory.Remove(ItemName);
+		return true;
 	}
+
+	return false;
 }
