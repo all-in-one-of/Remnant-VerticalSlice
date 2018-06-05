@@ -66,9 +66,9 @@ void UTeleportComponent::TraverseDimension()
 	query_params.bTraceAsyncScene = true;
 	query_params.bReturnPhysicalMaterial = false;
 
-
 	FHitResult hit;
 
+	// Setup capsule shape for SweepSingleByObjectType
 	const FVector extent(player->GetCapsuleComponent()->GetCollisionShape().Capsule.Radius);
 	const FCollisionShape shape = FCollisionShape::MakeCapsule(extent);
 	const FQuat quat = FQuat(player->GetActorRotation());
