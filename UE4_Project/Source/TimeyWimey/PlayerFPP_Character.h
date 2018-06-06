@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "GameFramework/CharacterMovementComponent.h"
+
 #include "PlayerFPP_Character.generated.h"
 
 class UInputComponent;
@@ -37,6 +39,8 @@ public:
 	EDimension GetDimension() { return dimension; }
 	void SetDimension(EDimension new_dimension) { dimension = new_dimension; }
 
+	FORCEINLINE bool GetIsFalling() { return this->GetMovementComponent()->IsFalling(); }
+
 protected:
 
 	virtual void BeginPlay();
@@ -60,7 +64,6 @@ private:
 
 	UInteractorComponent* InteractorComponent;
 	UCharacterMovementComponent* MovementComponent;
-	UInteractorComponent* InteractorComponent;
 	UInventoryComponent* InventoryComponent;
 	UTeleportComponent* teleport_component;
 
