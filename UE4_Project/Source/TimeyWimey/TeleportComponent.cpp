@@ -5,23 +5,27 @@
 #include "CoreMinimal.h"
 #include "PlayerFPP_Character.h"
 #include "Kismet/GameplayStatics.h"
-#include "Components/PrimitiveComponent.h"
-#include "Engine/CollisionProfile.h"
 
 #include "Public/WorldCollision.h"
 #include "Public/DrawDebugHelpers.h"
+#include "Public/TimerManager.h"
 
-#include "Classes/Engine/World.h"
-#include "Classes/Engine/Engine.h"
-#include "Classes/GameFramework/HUD.h"
-#include "Classes/GameFramework/Character.h"
-#include "Classes/Components/SphereComponent.h"
-#include "Classes/Components/CapsuleComponent.h"
+#include "GameFramework/Actor.h"
+#include "GameFramework/HUD.h"
+#include "GameFramework/Character.h"
+
+#include "Engine/CollisionProfile.h"
+#include "Engine/World.h"
+#include "Engine/Engine.h"
+
+#include "Components/PrimitiveComponent.h"
+#include "Components/SphereComponent.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values for this component's properties
 UTeleportComponent::UTeleportComponent()
 {
-	//PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = true;
 }
 
 // Called when the game starts
@@ -37,7 +41,7 @@ void UTeleportComponent::BeginPlay()
 // Called every frame
 void UTeleportComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
-	//Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
 void UTeleportComponent::Teleport(const FVector location)
@@ -47,6 +51,10 @@ void UTeleportComponent::Teleport(const FVector location)
 	// Set the new dimension to the not active dimension
 	const EDimension new_dimension = player->GetDimension() == EDimension::LOWER ? EDimension::UPPER : EDimension::LOWER;
 	player->SetDimension(new_dimension);
+
+	may_teleport = false;
+	// Start cooldown timer
+	GetWorld()->GetTimerManager().SetTimer(cooldown_timer_handle, this, &UTeleportComponent::OnCooldownEnd, cooldown_timer_length, false);
 
 	UE_LOG(LogTemp, Warning, TEXT("Teleporting player to position: %s"), *location.ToString());
 }
@@ -76,7 +84,7 @@ bool UTeleportComponent::TryTeleport()
 void UTeleportComponent::TraverseDimension()
 {
 	// Return if player is not on ground
-	if (player->GetIsFalling())
+	if (player->GetIsFalling() || !may_teleport)
 		return;
 
 	const FVector player_pos = player->GetActorLocation();
@@ -95,4 +103,10 @@ void UTeleportComponent::DenyTeleport()
 
 	// TODO: Change debug to actual text rendering. AHUD::DrawText
 	GEngine->AddOnScreenDebugMessage(-1, 3.0f, color, TEXT("Something is blocking your way"));
+}
+
+void UTeleportComponent::OnCooldownEnd()
+{
+	may_teleport = true;
+	GetWorld()->GetTimerManager().ClearTimer(cooldown_timer_handle);
 }

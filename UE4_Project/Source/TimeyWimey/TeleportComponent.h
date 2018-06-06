@@ -37,4 +37,11 @@ private:
 	void DenyTeleport();
 
 	APlayerFPP_Character* player;
+
+	UPROPERTY(EditAnywhere)
+	float cooldown_timer_length = 3.0f;
+
+	bool may_teleport = true;
+	FTimerHandle cooldown_timer_handle;
+	void OnCooldownEnd();
 };
