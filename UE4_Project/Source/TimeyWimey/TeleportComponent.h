@@ -4,11 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-
-#include "PlayerFPP_Character.h"
-
 #include "TeleportComponent.generated.h"
 
+class APlayerFPP_Character;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TIMEYWIMEY_API UTeleportComponent : public UActorComponent

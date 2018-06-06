@@ -1,22 +1,22 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TeleportComponent.h"
-#include "../CoreMinimal.h"
-#include "Kismet/GameplayStatics.h"
+
+#include "CoreMinimal.h"
 #include "PlayerFPP_Character.h"
-#include "../Engine/Classes/Components/PrimitiveComponent.h"
-#include "../Engine/Classes/Engine/CollisionProfile.h"
-#include "../Engine/Public/WorldCollision.h"
-#include "../Engine/Classes/Engine/World.h"
-#include "../Engine/Classes/Engine/Engine.h"
-#include "../Engine/Public/DrawDebugHelpers.h"
-#include "../Engine/Classes/GameFramework/HUD.h"
-#include "../Engine/Classes/GameFramework/Character.h"
-#include "../Engine/Classes/Components/SphereComponent.h"
-#include "../Engine/Classes/Components/CapsuleComponent.h"
-#include "FPP_HUD.h"
-#include "../Engine/Classes/GameFramework/HUD.h"
-#include "../Engine/Classes/Camera/CameraComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Components/PrimitiveComponent.h"
+#include "Engine/CollisionProfile.h"
+
+#include "Public/WorldCollision.h"
+#include "Public/DrawDebugHelpers.h"
+
+#include "Classes/Engine/World.h"
+#include "Classes/Engine/Engine.h"
+#include "Classes/GameFramework/HUD.h"
+#include "Classes/GameFramework/Character.h"
+#include "Classes/Components/SphereComponent.h"
+#include "Classes/Components/CapsuleComponent.h"
 
 // Sets default values for this component's properties
 UTeleportComponent::UTeleportComponent()
