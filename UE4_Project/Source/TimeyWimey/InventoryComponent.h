@@ -16,9 +16,11 @@ public:
 	
 	UInventoryComponent();
 
+	UFUNCTION(BlueprintCallable)
 	bool HasItem(FName ItemName) const;
-	void AddItem(FName ItemName);
-	void RemoveItem(FName ItemName);
+
+	bool AddItem(FName ItemName);
+	bool RemoveItem(FName ItemName);
 
 protected:
 	

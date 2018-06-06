@@ -2,9 +2,11 @@
 
 #include "InteractComponent.h"
 
+#include "GameFramework/Actor.h"
+
 UInteractComponent::UInteractComponent()
 {
-
+	
 }
 
 void UInteractComponent::BeginPlay()
@@ -12,7 +14,7 @@ void UInteractComponent::BeginPlay()
 	Super::BeginPlay();
 }
 
-void UInteractComponent::RequestInteract(AActor* Interactor)
+void UInteractComponent::RequestInteract()
 {
-	OnInteractRequest.Broadcast(Interactor);
+	OnInteractRequest.Broadcast();
 }

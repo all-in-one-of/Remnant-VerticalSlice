@@ -6,7 +6,7 @@
 #include "Components/ActorComponent.h"
 #include "InteractComponent.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnInteractRequest, AActor*, Interactor);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnInteractRequest);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TIMEYWIMEY_API UInteractComponent : public UActorComponent
@@ -18,7 +18,7 @@ public:
 	
 	UInteractComponent();
 
-	void RequestInteract(AActor* Interactor);
+	void RequestInteract();
 
 	UPROPERTY(BlueprintAssignable)
 	FOnInteractRequest OnInteractRequest;

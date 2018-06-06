@@ -6,6 +6,7 @@
 #include "InteractComponent.h"
 
 AInteractableActor::AInteractableActor()
+: InteractableType(EInteractableType::INTERACTABLE_NORMAL)
 {
 	/// Set up Sphere Component
 	FName SphereComponentName = TEXT("SphereCollision");
