@@ -1,9 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "TeleportComponent.h"
-
 #include "CoreMinimal.h"
+
 #include "PlayerFPP_Character.h"
+#include "Mirror.h"
+
 #include "Kismet/GameplayStatics.h"
 
 #include "Public/WorldCollision.h"
@@ -46,6 +48,7 @@ void UTeleportComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 
 void UTeleportComponent::Teleport(const FVector location)
 {
+	//player->TeleportTo(location, player->GetActorRotation());
 	player->SetActorLocation(location);
 
 	// Set the new dimension to the not active dimension
@@ -55,6 +58,9 @@ void UTeleportComponent::Teleport(const FVector location)
 	may_teleport = false;
 	// Start cooldown timer
 	GetWorld()->GetTimerManager().SetTimer(cooldown_timer_handle, this, &UTeleportComponent::OnCooldownEnd, cooldown_timer_length, false);
+
+	// For bps
+	just_teleported = true;
 
 	UE_LOG(LogTemp, Warning, TEXT("Teleporting player to position: %s"), *location.ToString());
 }

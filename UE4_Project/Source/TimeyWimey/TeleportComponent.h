@@ -24,6 +24,8 @@ protected:
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool just_teleported;
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -44,4 +46,5 @@ private:
 	bool may_teleport = true;
 	FTimerHandle cooldown_timer_handle;
 	void OnCooldownEnd();
+
 };
