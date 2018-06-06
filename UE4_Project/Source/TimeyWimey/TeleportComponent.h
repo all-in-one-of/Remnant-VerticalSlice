@@ -19,7 +19,6 @@ public:
 	UTeleportComponent();
 
 	void TraverseDimension();
-	void DenyTeleport();
 
 protected:
 	virtual void BeginPlay() override;
@@ -27,5 +26,17 @@ protected:
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	void Teleport(EDimension dimension, const FVector location);
+	void Teleport(const FVector location);
+
+private:
+	UPROPERTY(EditAnywhere)
+	float teleport_amount = 10000.0f;
+
+	UPROPERTY(EditAnywhere)
+	float trace_length = 10500.0f;
+
+	bool TryTeleport();
+	void DenyTeleport();
+
+	APlayerFPP_Character* player;
 };

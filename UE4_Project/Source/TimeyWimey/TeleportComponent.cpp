@@ -16,109 +16,79 @@
 #include "../Engine/Classes/Components/CapsuleComponent.h"
 #include "FPP_HUD.h"
 #include "../Engine/Classes/GameFramework/HUD.h"
+#include "../Engine/Classes/Camera/CameraComponent.h"
 
 // Sets default values for this component's properties
 UTeleportComponent::UTeleportComponent()
 {
+	//PrimaryComponentTick.bCanEverTick = true;
 }
-
 
 // Called when the game starts
 void UTeleportComponent::BeginPlay()
 {
 	Super::BeginPlay();
-}
 
+	player = Cast<APlayerFPP_Character>(GetOwner());
+	if (!player)
+		UE_LOG(LogTemp, Error, TEXT("Failed to get player!"));
+}
 
 // Called every frame
 void UTeleportComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
+	//Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
-void UTeleportComponent::Teleport(EDimension dimension, const FVector location)
+void UTeleportComponent::Teleport(const FVector location)
 {
-	auto player = Cast<APlayerFPP_Character>(GetOwner());
 	player->SetActorLocation(location);
 
 	// Set the new dimension to the not active dimension
-	EDimension new_dimension = player->GetDimension() == EDimension::LOWER ? EDimension::UPPER : EDimension::LOWER;
+	const EDimension new_dimension = player->GetDimension() == EDimension::LOWER ? EDimension::UPPER : EDimension::LOWER;
 	player->SetDimension(new_dimension);
 
 	UE_LOG(LogTemp, Warning, TEXT("Teleporting player to position: %s"), *location.ToString());
 }
 
-void UTeleportComponent::TraverseDimension()
+bool UTeleportComponent::TryTeleport()
 {
-	// Get Player & pos
-	auto player = Cast<APlayerFPP_Character>(GetOwner());
-	const FVector player_pos = player->GetActorLocation();
+	const EDimension dimension = player->GetDimension();
 
-	// Set some constants
-	static const float teleport_amount = 10000.0f;
-	static const float trace_length = 10500.0f;
-
-	// Create needed variables and default them
-	FVector new_pos = player_pos;
-	FVector trace_end = player_pos;
-	EDimension dimension = player->GetDimension();
-
-	// Setup trace params
-	FCollisionQueryParams query_params(TEXT(""), true, player);
-	query_params.bTraceComplex = true;
-	query_params.bTraceAsyncScene = true;
-	query_params.bReturnPhysicalMaterial = false;
+	const FVector trace_start = player->GetActorLocation();
+	const FVector trace_end = trace_start + FVector(0.0f, 0.0f, (dimension == EDimension::LOWER ? trace_length : -trace_length));
 
 	FHitResult hit;
+	const FCollisionQueryParams query_params(TEXT(""), true, player);
+	const FCollisionObjectQueryParams object_query_params = dimension == EDimension::LOWER ? ECC_GameTraceChannel3 : ECC_GameTraceChannel2;
 
 	// Setup capsule shape for SweepSingleByObjectType
 	const FVector extent(player->GetCapsuleComponent()->GetCollisionShape().Capsule.Radius);
 	const FCollisionShape shape = FCollisionShape::MakeCapsule(extent);
 	const FQuat quat = FQuat(player->GetActorRotation());
 
+	if (!GetWorld()->SweepSingleByObjectType(hit, trace_start, trace_end, quat, object_query_params, shape, query_params))
+		return true;
+
+	return false;
+}
+
+void UTeleportComponent::TraverseDimension()
+{
+	const FVector player_pos = player->GetActorLocation();
+	const FVector new_pos = player_pos + FVector(0.0f, 0.0f, (player->GetDimension() == EDimension::LOWER ? teleport_amount : -teleport_amount));
+
 	// TODO: Add screen shake / fade before teleporting
-
-	if (dimension == EDimension::LOWER)
-	{
-		// Increase trace end and new pos
-		trace_end.Z += trace_length;
-		new_pos.Z += teleport_amount;
-
-		// Capsule trace against D2 objects, if nothing is hit, teleport
-		if (!GetWorld()->SweepSingleByObjectType(hit, player_pos, trace_end, quat, ECC_GameTraceChannel3, shape, query_params))
-		{
-			Teleport(dimension, new_pos);
-			return;
-		}
-	}
+	if (TryTeleport())
+		Teleport(new_pos);
 	else
-	{
-		// Decrease trace end and new pos
-		trace_end.Z -= trace_length;
-		new_pos.Z -= teleport_amount;
-
-		// Capsule trace against D1 objects, if nothing is hit, teleport
-		if (!GetWorld()->SweepSingleByObjectType(hit, player_pos, trace_end, quat, ECC_GameTraceChannel2, shape, query_params))
-		{
-			Teleport(dimension, new_pos);
-			return;
-		}
-	}
-
-	// If the ray hit something, pop text to the screen
-	DenyTeleport();
+		DenyTeleport();
 }
 
 void UTeleportComponent::DenyTeleport()
 {
-	auto player = Cast<APlayerFPP_Character>(GetOwner());
 	const FColor color = FLinearColor(1.0f, 1.0f, 1.0f, 1.0f).ToFColor(true);
-	const float duration(3.0f);
-	bool draw_shadow(true);
 
 	// TODO: Change debug to actual text rendering. AHUD::DrawText
-	//DrawDebugString(GEngine->GetWorldFromContextObject(this, EGetWorldErrorMode::ReturnNull), player->GetActorLocation(), *FString(TEXT("Something is blocking your way")), NULL, color, duration, draw_shadow);
 	GEngine->AddOnScreenDebugMessage(-1, 3.0f, color, TEXT("Something is blocking your way"));
-	//UCanvas* canvas = GetWorld()->GetCanvasForDrawMaterialToRenderTarget();
-	//canvas->DrawItem(AFPP_HUD::DrawText2D(TEXT("LOL"), 0.0f, 0.0f, color, 1.0f, DEFAULT_GUI_FONT));
 }
-
