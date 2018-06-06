@@ -75,6 +75,10 @@ bool UTeleportComponent::TryTeleport()
 
 void UTeleportComponent::TraverseDimension()
 {
+	// Return if player is not on ground
+	if (player->GetIsFalling())
+		return;
+
 	const FVector player_pos = player->GetActorLocation();
 	const FVector new_pos = player_pos + FVector(0.0f, 0.0f, (player->GetDimension() == EDimension::LOWER ? teleport_amount : -teleport_amount));
 
