@@ -82,7 +82,7 @@ void UTeleportComponent::TraverseDimension()
 	const FVector player_pos = player->GetActorLocation();
 	const FVector new_pos = player_pos + FVector(0.0f, 0.0f, (player->GetDimension() == EDimension::LOWER ? teleport_amount : -teleport_amount));
 
-	// TODO: Add screen shake / fade before teleporting
+	// TODO: Dissolve shader or material via blueprints OR c++ before teleporting
 	if (TryTeleport())
 		Teleport(new_pos);
 	else
