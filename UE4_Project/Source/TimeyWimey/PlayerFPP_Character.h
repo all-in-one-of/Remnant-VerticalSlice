@@ -60,7 +60,6 @@ private:
 
 	UInteractorComponent* InteractorComponent;
 	UCharacterMovementComponent* MovementComponent;
-	UInteractorComponent* InteractorComponent;
 	UInventoryComponent* InventoryComponent;
 	UTeleportComponent* teleport_component;
 
