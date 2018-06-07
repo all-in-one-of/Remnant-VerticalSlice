@@ -11,7 +11,6 @@
 #include "InventoryComponent.h"
 #include "TeleportComponent.h"
 
-
 APlayerFPP_Character::APlayerFPP_Character()
 {
 	/// Set up Capsule

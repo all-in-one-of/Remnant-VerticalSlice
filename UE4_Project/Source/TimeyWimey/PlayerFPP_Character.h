@@ -41,6 +41,8 @@ public:
 
 	FORCEINLINE bool GetIsFalling() const { return this->GetMovementComponent()->IsFalling(); }
 
+	UTeleportComponent* GetTeleportComponent() { return teleport_component; }
+
 protected:
 
 	virtual void BeginPlay();
@@ -58,7 +60,7 @@ protected:
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
 
 private:
-	
+
 	void TraverseDimension();
 	void OnInteract();
 

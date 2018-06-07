@@ -4,7 +4,6 @@
 #include "CoreMinimal.h"
 
 #include "PlayerFPP_Character.h"
-#include "Mirror.h"
 
 #include "Kismet/GameplayStatics.h"
 
@@ -60,7 +59,7 @@ void UTeleportComponent::Teleport(const FVector location)
 	GetWorld()->GetTimerManager().SetTimer(cooldown_timer_handle, this, &UTeleportComponent::OnCooldownEnd, cooldown_timer_length, false);
 
 	// For bps
-	just_teleported = true;
+	just_teleported = !just_teleported;
 
 	UE_LOG(LogTemp, Warning, TEXT("Teleporting player to position: %s"), *location.ToString());
 }
