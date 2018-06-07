@@ -24,7 +24,6 @@ protected:
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	void Teleport(const FVector location);
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -33,8 +32,16 @@ private:
 	UPROPERTY(EditAnywhere)
 	float trace_length = 10500.0f;
 
+	void Teleport(const FVector location);
 	bool TryTeleport();
 	void DenyTeleport();
 
 	APlayerFPP_Character* player;
+
+	UPROPERTY(EditAnywhere)
+	float cooldown_timer_length = 3.0f;
+
+	bool may_teleport = true;
+	FTimerHandle cooldown_timer_handle;
+	void OnCooldownEnd();
 };
