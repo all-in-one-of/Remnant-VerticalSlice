@@ -3,15 +3,15 @@
 APuzzle01_Bookshelf::APuzzle01_Bookshelf()
 : StartPosition(EBookshelfPositionPast::BOOKSHELF_RIGHT)
 {
-	SetStartValueBookshelfDataPast((int)EBookshelfPositionPast::BOOKSHELF_LEFT, FVector(-7050.f, -170.f, 10583.f), FVector(180.f, 0.f, 0.f));
-	SetStartValueBookshelfDataPast((int)EBookshelfPositionPast::BOOKSHELF_MIDDLE, FVector(-7950.0, -170.f, 10583.f), FVector(180.f, 0.f, 0.f));
-	SetStartValueBookshelfDataPast((int)EBookshelfPositionPast::BOOKSHELF_RIGHT, FVector(-8787.f, -170.f, 10583.f), FVector(180.f, 0.f, 0.f));
+	SetStartValueBookshelfDataPast((int)EBookshelfPositionPast::BOOKSHELF_LEFT, FVector(-7049.26416, -147.416321f, 10000.839844f), FRotator(0.f, 180.f, 0.f));
+	SetStartValueBookshelfDataPast((int)EBookshelfPositionPast::BOOKSHELF_MIDDLE, FVector(-8150.07959f, -147.416321f, 10000.839844f), FRotator(0.f, 180.f, 0.f));
+	SetStartValueBookshelfDataPast((int)EBookshelfPositionPast::BOOKSHELF_RIGHT, FVector(-8852.035156f, -147.416321f, 10000.839844f), FRotator(0.f, 180.f, 0.f));
 
-	SetStartValueBookshelfDataPresent((int)EBookshelfPositionPresent::BOOKSHELF_LEFT_HIGH, FVector(-7050.f, 400.f, 230.f), FVector(-110.f, 0.f, 0.f));
-	SetStartValueBookshelfDataPresent((int)EBookshelfPositionPresent::BOOKSHELF_LEFT_MIDDLE, FVector(-7050.f, 407.f, 34.f), FVector(-90.f, 0.f, 0.f));
-	SetStartValueBookshelfDataPresent((int)EBookshelfPositionPresent::BOOKSHELF_LEFT_LOW, FVector(-7051.5f, 445.f, -170.f), FVector(-68.f, 0.f, 0.f));
-	SetStartValueBookshelfDataPresent((int)EBookshelfPositionPresent::BOOKSHELF_MIDDLE, FVector(-7950.f, 448.f, 34.f), FVector(-90.f, 0.f, 0.f));
-	SetStartValueBookshelfDataPresent((int)EBookshelfPositionPresent::BOOKSHELF_RIGHT, FVector(-8787.f, 445.f, -169.f), FVector(-68.f, 0.f, 0.f));
+	SetStartValueBookshelfDataPresent((int)EBookshelfPositionPresent::BOOKSHELF_LEFT_HIGH, FVector(-7049.26416f, -133.816177f, -114.383659f), FRotator(0.f, 0.f, -44.254944f));
+	SetStartValueBookshelfDataPresent((int)EBookshelfPositionPresent::BOOKSHELF_LEFT_MIDDLE, FVector(-7049.26416f, -187.495071, -114.383659f), FRotator(0.f, 0.f, -24.65209f));
+	SetStartValueBookshelfDataPresent((int)EBookshelfPositionPresent::BOOKSHELF_LEFT_LOW, FVector(-7049.26416f, -187.495071f, -114.383659f), FRotator(-4.182432f, 0.f, -8.735152f));
+	SetStartValueBookshelfDataPresent((int)EBookshelfPositionPresent::BOOKSHELF_MIDDLE, FVector(-8150.080078f, -185.646927f, -114.3825f), FRotator(14.960928f, -0.897583f, -25.156158f));
+	SetStartValueBookshelfDataPresent((int)EBookshelfPositionPresent::BOOKSHELF_RIGHT, FVector(-8852.035156f, -205.443604f, -2.499939f), FRotator(0.f, 0.f, 0.f));
 }
 
 void APuzzle01_Bookshelf::BeginPlay()
@@ -19,7 +19,7 @@ void APuzzle01_Bookshelf::BeginPlay()
 	Super::BeginPlay();
 
 	CurrentPosition = (int)StartPosition;
-	SetBookshefPositions();	
+	SetBookshefPositions();
 }
 
 void APuzzle01_Bookshelf::MoveLeft()
@@ -44,26 +44,20 @@ void APuzzle01_Bookshelf::MoveRight()
 	SetBookshefPositions();
 }
 
-void APuzzle01_Bookshelf::SetStartValueBookshelfDataPresent(int BookshelfIndex, FVector Pos, FVector Rot)
+void APuzzle01_Bookshelf::SetStartValueBookshelfDataPresent(int BookshelfIndex, FVector Pos, FRotator Rot)
 {
 	FBookshelfData BookshelfData;
-
-	FRotator Rotator;
-	Rotator.MakeFromEuler(Rot);
 
 	PositionPresetsPresent[BookshelfIndex].Position = Pos;
-	PositionPresetsPresent[BookshelfIndex].Rotation = Rotator;
+	PositionPresetsPresent[BookshelfIndex].Rotation = Rot;
 }
 
-void APuzzle01_Bookshelf::SetStartValueBookshelfDataPast(int BookshelfIndex, FVector Pos, FVector Rot)
+void APuzzle01_Bookshelf::SetStartValueBookshelfDataPast(int BookshelfIndex, FVector Pos, FRotator Rot)
 {
-	FBookshelfData BookshelfData;
-
-	FRotator Rotator;
-	Rotator.MakeFromEuler(Rot);
+	FBookshelfData BookshelfData;;
 
 	PositionPresetsPast[BookshelfIndex].Position = Pos;
-	PositionPresetsPast[BookshelfIndex].Rotation = Rotator;
+	PositionPresetsPast[BookshelfIndex].Rotation = Rot;
 }
 
 void APuzzle01_Bookshelf::SetBookshefPositions()
@@ -75,36 +69,35 @@ void APuzzle01_Bookshelf::SetBookshefPositions()
 		PositionPresetsPast[CurrentPosition].Rotation
 	);
 
-	UE_LOG(LogTemp, Warning, TEXT("%i"), CurrentPosition)
-
 	if (BookshelfInPresent)
 	{
 		if (CurrentPosition == (int)EBookshelfPositionPast::BOOKSHELF_LEFT)
 		{
-			BookshelfInPresent->SetActorLocation(
-				PositionPresetsPresent[(int)EBookshelfPositionPresent::BOOKSHELF_LEFT_MIDDLE].Position
-			);
-			BookshelfInPresent->SetActorRotation(
-				PositionPresetsPresent[(int)EBookshelfPositionPresent::BOOKSHELF_LEFT_MIDDLE].Rotation
-			);
+			SetBookshelfPositionPresent((int)EBookshelfPositionPast::BOOKSHELF_LEFT);
+
+			UE_LOG(LogTemp, Warning, TEXT("LEFT"))
 		}
 		else if (CurrentPosition == (int)EBookshelfPositionPast::BOOKSHELF_MIDDLE)
 		{
-			BookshelfInPresent->SetActorLocation(
-				PositionPresetsPresent[(int)EBookshelfPositionPresent::BOOKSHELF_MIDDLE].Position
-			);
-			BookshelfInPresent->SetActorRotation(
-				PositionPresetsPresent[(int)EBookshelfPositionPresent::BOOKSHELF_MIDDLE].Rotation
-			);
+			SetBookshelfPositionPresent((int)EBookshelfPositionPast::BOOKSHELF_MIDDLE);
+
+			UE_LOG(LogTemp, Warning, TEXT("MIDDLE"))
 		}
 		else if (CurrentPosition == (int)EBookshelfPositionPast::BOOKSHELF_RIGHT)
 		{
-			BookshelfInPresent->SetActorLocation(
-				PositionPresetsPresent[(int)EBookshelfPositionPresent::BOOKSHELF_RIGHT].Position
-			);
-			BookshelfInPresent->SetActorRotation(
-				PositionPresetsPresent[(int)EBookshelfPositionPresent::BOOKSHELF_RIGHT].Rotation
-			);
+			SetBookshelfPositionPresent((int)EBookshelfPositionPast::BOOKSHELF_RIGHT);
+
+			UE_LOG(LogTemp, Warning, TEXT("RIGHT"))
 		}
 	}
+}
+
+void APuzzle01_Bookshelf::SetBookshelfPositionPresent(int BookshelfIndex)
+{
+	BookshelfInPresent->SetActorLocation(
+		PositionPresetsPresent[BookshelfIndex].Position
+	);
+	BookshelfInPresent->SetActorRotation(
+		PositionPresetsPresent[BookshelfIndex].Rotation
+	);
 }
