@@ -36,10 +36,12 @@ public:
 	// Returns FirstPersonCameraComponent sub object
 	FORCEINLINE class UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
-	EDimension GetDimension() { return dimension; }
+	const EDimension GetDimension() { return dimension; }
 	void SetDimension(EDimension new_dimension) { dimension = new_dimension; }
 
-	FORCEINLINE bool GetIsFalling() { return this->GetMovementComponent()->IsFalling(); }
+	FORCEINLINE bool GetIsFalling() const { return this->GetMovementComponent()->IsFalling(); }
+
+	UTeleportComponent* GetTeleportComponent() { return teleport_component; }
 
 protected:
 
@@ -58,7 +60,7 @@ protected:
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
 
 private:
-	
+
 	void TraverseDimension();
 	void OnInteract();
 

@@ -11,7 +11,6 @@
 #include "InventoryComponent.h"
 #include "TeleportComponent.h"
 
-
 APlayerFPP_Character::APlayerFPP_Character()
 {
 	/// Set up Capsule
@@ -34,20 +33,13 @@ APlayerFPP_Character::APlayerFPP_Character()
 	MovementComponent->NavAgentProps.bCanCrouch = EnableCrouch;
 
 	/// Set up Interactor Component
-	FName InteractorComponentName = TEXT("InteractorComponent");
-
-	InteractorComponent = CreateDefaultSubobject<UInteractorComponent>(InteractorComponentName);
+	InteractorComponent = CreateDefaultSubobject<UInteractorComponent>(TEXT("InteractorComponent"));
 
 	/// Set up Inventory Component
-	FName InventoryComponentName = TEXT("InventoryComponent");
-
-	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(InventoryComponentName);
+	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(TEXT("InventoryComponent"));
 
 	/// Set up Teleport Component
-	FName TeleportComponentName = TEXT("TeleportComponent");
-
-	teleport_component = CreateDefaultSubobject<UTeleportComponent>(TeleportComponentName);
-
+	teleport_component = CreateDefaultSubobject<UTeleportComponent>(TEXT("TeleportComponent"));
 }
 
 void APlayerFPP_Character::BeginPlay()
