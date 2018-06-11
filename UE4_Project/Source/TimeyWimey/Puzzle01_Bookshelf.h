@@ -66,11 +66,8 @@ private:
 
 	UPROPERTY(EditAnywhere, Category="Bookshelf Properties")
 	EBookshelfPositionPast StartPosition;
-
-	UPROPERTY(EditAnywhere, Category="Bookshelf Properties")
+	
 	FBookshelfData PositionPresetsPast[NUM_POS_PRESETS_PAST];
-
-	UPROPERTY(EditAnywhere, Category = "Bookshelf Properties")
 	FBookshelfData PositionPresetsPresent[NUM_POS_PRESETS_PRESENT];
 
 	UPROPERTY(EditAnywhere, Category = "Bookshelf Properties")

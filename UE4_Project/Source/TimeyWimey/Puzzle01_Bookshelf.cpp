@@ -3,15 +3,16 @@
 APuzzle01_Bookshelf::APuzzle01_Bookshelf()
 : StartPosition(EBookshelfPositionPast::BOOKSHELF_RIGHT)
 {
-	SetStartValueBookshelfDataPast((int)EBookshelfPositionPast::BOOKSHELF_LEFT, FVector(-7049.26416, -147.416321f, 10000.839844f), FRotator(0.f, 180.f, 0.f));
-	SetStartValueBookshelfDataPast((int)EBookshelfPositionPast::BOOKSHELF_MIDDLE, FVector(-8150.07959f, -147.416321f, 10000.839844f), FRotator(0.f, 180.f, 0.f));
-	SetStartValueBookshelfDataPast((int)EBookshelfPositionPast::BOOKSHELF_RIGHT, FVector(-8852.035156f, -147.416321f, 10000.839844f), FRotator(0.f, 180.f, 0.f));
+	/// Plz no touch this horrible code, its just hard coded presets for the bookshelf positions
+	SetStartValueBookshelfDataPast((int)EBookshelfPositionPast::BOOKSHELF_LEFT, FVector(-7050.f, -170.f, 10575.5f), FRotator(0.f, 0.f, 0.f));
+	SetStartValueBookshelfDataPast((int)EBookshelfPositionPast::BOOKSHELF_MIDDLE, FVector(-7950.f, -170.f, 10575.5f), FRotator(0.f, 0.f, 0.f));
+	SetStartValueBookshelfDataPast((int)EBookshelfPositionPast::BOOKSHELF_RIGHT, FVector(-8787.f, -170.f, 10575.5f), FRotator(0.f, 0.f, 0.f));
 
-	SetStartValueBookshelfDataPresent((int)EBookshelfPositionPresent::BOOKSHELF_LEFT_HIGH, FVector(-7049.26416f, -133.816177f, -114.383659f), FRotator(0.f, 0.f, -44.254944f));
-	SetStartValueBookshelfDataPresent((int)EBookshelfPositionPresent::BOOKSHELF_LEFT_MIDDLE, FVector(-7049.26416f, -187.495071, -114.383659f), FRotator(0.f, 0.f, -24.65209f));
-	SetStartValueBookshelfDataPresent((int)EBookshelfPositionPresent::BOOKSHELF_LEFT_LOW, FVector(-7049.26416f, -187.495071f, -114.383659f), FRotator(-4.182432f, 0.f, -8.735152f));
-	SetStartValueBookshelfDataPresent((int)EBookshelfPositionPresent::BOOKSHELF_MIDDLE, FVector(-8150.080078f, -185.646927f, -114.3825f), FRotator(14.960928f, -0.897583f, -25.156158f));
-	SetStartValueBookshelfDataPresent((int)EBookshelfPositionPresent::BOOKSHELF_RIGHT, FVector(-8852.035156f, -205.443604f, -2.499939f), FRotator(0.f, 0.f, 0.f));
+	SetStartValueBookshelfDataPresent((int)EBookshelfPositionPresent::BOOKSHELF_LEFT_HIGH, FVector(-7050.f, 398.87f, 229.6f), FRotator(0.f, 0.f, -110.f));
+	SetStartValueBookshelfDataPresent((int)EBookshelfPositionPresent::BOOKSHELF_LEFT_MIDDLE, FVector(-7050.f, 406.579132f, 33.823f), FRotator(0.f, 0.f, -90.f));
+	SetStartValueBookshelfDataPresent((int)EBookshelfPositionPresent::BOOKSHELF_LEFT_LOW, FVector(-7050.f, 444.596954f, -169.25676f), FRotator(0.f, 0.f, -68.f));
+	SetStartValueBookshelfDataPresent((int)EBookshelfPositionPresent::BOOKSHELF_MIDDLE, FVector(-7950.f, 480.f, 34.f), FRotator(5.f, 0.f, 84.262581f));
+	SetStartValueBookshelfDataPresent((int)EBookshelfPositionPresent::BOOKSHELF_RIGHT, FVector(-8787.313477f, 458.825592f, -134.042709f), FRotator(0.f, 0.f, -68.0f));
 }
 
 void APuzzle01_Bookshelf::BeginPlay()
@@ -73,21 +74,17 @@ void APuzzle01_Bookshelf::SetBookshefPositions()
 	{
 		if (CurrentPosition == (int)EBookshelfPositionPast::BOOKSHELF_LEFT)
 		{
-			SetBookshelfPositionPresent((int)EBookshelfPositionPast::BOOKSHELF_LEFT);
+			SetBookshelfPositionPresent((int)EBookshelfPositionPresent::BOOKSHELF_LEFT_LOW);
 
-			UE_LOG(LogTemp, Warning, TEXT("LEFT"))
+			// TODO: Make the bookshelf rotate differently depending on the lamps state.
 		}
 		else if (CurrentPosition == (int)EBookshelfPositionPast::BOOKSHELF_MIDDLE)
 		{
-			SetBookshelfPositionPresent((int)EBookshelfPositionPast::BOOKSHELF_MIDDLE);
-
-			UE_LOG(LogTemp, Warning, TEXT("MIDDLE"))
+			SetBookshelfPositionPresent((int)EBookshelfPositionPresent::BOOKSHELF_MIDDLE);
 		}
 		else if (CurrentPosition == (int)EBookshelfPositionPast::BOOKSHELF_RIGHT)
 		{
-			SetBookshelfPositionPresent((int)EBookshelfPositionPast::BOOKSHELF_RIGHT);
-
-			UE_LOG(LogTemp, Warning, TEXT("RIGHT"))
+			SetBookshelfPositionPresent((int)EBookshelfPositionPresent::BOOKSHELF_RIGHT);
 		}
 	}
 }
