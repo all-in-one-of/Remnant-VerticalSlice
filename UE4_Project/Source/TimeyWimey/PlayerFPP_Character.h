@@ -70,5 +70,4 @@ private:
 	UTeleportComponent* teleport_component;
 
 	EDimension dimension;
-
 };

@@ -24,7 +24,10 @@ protected:
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	// BP needed variables here
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	bool start_dissolve;
+
 	bool just_teleported;
 
 private:
@@ -40,11 +43,11 @@ private:
 
 	APlayerFPP_Character* player;
 
+	// Teleport cooldown
 	UPROPERTY(EditAnywhere)
-	float cooldown_timer_length = 3.0f;
+	float cooldown_timer_length = 1.0f;
 
-	bool may_teleport = true;
-	FTimerHandle cooldown_timer_handle;
-	void OnCooldownEnd();
-
+	bool teleport_allowed = true;
+	FTimerHandle teleport_cooldown_handle;
+	void OnTeleportCooldownEnd();
 };

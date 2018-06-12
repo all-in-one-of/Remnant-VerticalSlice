@@ -47,25 +47,31 @@ void UTeleportComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 
 void UTeleportComponent::Teleport(const FVector location)
 {
-	//player->TeleportTo(location, player->GetActorRotation());
 	player->SetActorLocation(location);
 
 	// Set the new dimension to the not active dimension
 	const EDimension new_dimension = player->GetDimension() == EDimension::LOWER ? EDimension::UPPER : EDimension::LOWER;
 	player->SetDimension(new_dimension);
 
-	may_teleport = false;
-	// Start cooldown timer
-	GetWorld()->GetTimerManager().SetTimer(cooldown_timer_handle, this, &UTeleportComponent::OnCooldownEnd, cooldown_timer_length, false);
+	teleport_allowed = false;
 
-	// For bps
-	just_teleported = !just_teleported;
+	// Start cooldown timer
+	GetWorld()->GetTimerManager().SetTimer(teleport_cooldown_handle, this, &UTeleportComponent::OnTeleportCooldownEnd, cooldown_timer_length, false);
+	
+	// For MirrorComponent 
+	just_teleported = true;
+
+	// For DissolveComponent
+	start_dissolve = !start_dissolve;
 
 	UE_LOG(LogTemp, Warning, TEXT("Teleporting player to position: %s"), *location.ToString());
 }
 
 bool UTeleportComponent::TryTeleport()
 {
+	if (!teleport_allowed)
+		return false;
+
 	const EDimension dimension = player->GetDimension();
 
 	const FVector trace_start = player->GetActorLocation();
@@ -88,16 +94,13 @@ bool UTeleportComponent::TryTeleport()
 
 void UTeleportComponent::TraverseDimension()
 {
-	// Return if player is not on ground
-	if (player->GetIsFalling() || !may_teleport)
-		return;
-
-	const FVector player_pos = player->GetActorLocation();
-	const FVector new_pos = player_pos + FVector(0.0f, 0.0f, (player->GetDimension() == EDimension::LOWER ? teleport_amount : -teleport_amount));
-
-	// TODO: Dissolve shader or material via blueprints OR c++ before teleporting
+	// If we are allowed to teleport, lock the player and start dissolve
 	if (TryTeleport())
+	{
+		const FVector player_pos = player->GetActorLocation();
+		const FVector new_pos = player_pos + FVector(0.0f, 0.0f, (player->GetDimension() == EDimension::LOWER ? teleport_amount : -teleport_amount));
 		Teleport(new_pos);
+	}
 	else
 		DenyTeleport();
 }
@@ -107,11 +110,15 @@ void UTeleportComponent::DenyTeleport()
 	const FColor color = FLinearColor(1.0f, 1.0f, 1.0f, 1.0f).ToFColor(true);
 
 	// TODO: Change debug to actual text rendering. AHUD::DrawText
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, color, TEXT("Something is blocking your way"));
+
+	GetWorld()->GetTimerManager().IsTimerActive(teleport_cooldown_handle) ? 
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, color, TEXT("Teleport is cooling down!")) :
+		GEngine->AddOnScreenDebugMessage(-1, 3.0f, color, TEXT("Something is blocking your way"));
 }
 
-void UTeleportComponent::OnCooldownEnd()
+void UTeleportComponent::OnTeleportCooldownEnd()
 {
-	may_teleport = true;
-	GetWorld()->GetTimerManager().ClearTimer(cooldown_timer_handle);
+	start_dissolve = false;
+	teleport_allowed = true;
+	GetWorld()->GetTimerManager().ClearTimer(teleport_cooldown_handle);
 }
