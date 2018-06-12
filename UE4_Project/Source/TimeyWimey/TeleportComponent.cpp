@@ -9,14 +9,12 @@
 
 #include "Public/WorldCollision.h"
 #include "Public/DrawDebugHelpers.h"
-#include "Public/TimerManager.h"
 
 #include "GameFramework/Actor.h"
 #include "GameFramework/HUD.h"
 #include "GameFramework/Character.h"
 
 #include "Engine/CollisionProfile.h"
-#include "Engine/World.h"
 #include "Engine/Engine.h"
 
 #include "Components/PrimitiveComponent.h"
@@ -53,16 +51,29 @@ void UTeleportComponent::Teleport(const FVector location)
 	const EDimension new_dimension = player->GetDimension() == EDimension::LOWER ? EDimension::UPPER : EDimension::LOWER;
 	player->SetDimension(new_dimension);
 
-	teleport_allowed = false;
+	StartTeleportCooldown();
 
-	// Start cooldown timer
-	GetWorld()->GetTimerManager().SetTimer(teleport_cooldown_handle, this, &UTeleportComponent::OnTeleportCooldownEnd, cooldown_timer_length, false);
-	
 	// For MirrorComponent 
 	just_teleported = true;
 
-	// For DissolveComponent
-	start_dissolve = !start_dissolve;
+	UE_LOG(LogTemp, Warning, TEXT("Teleporting player to position: %s"), *location.ToString());
+}
+
+void UTeleportComponent::Teleport()
+{
+	const FVector player_pos = player->GetActorLocation();
+	const FVector location = player_pos + FVector(0.0f, 0.0f, (player->GetDimension() == EDimension::LOWER ? teleport_amount : -teleport_amount));
+
+	player->SetActorLocation(location);
+
+	// Set the new dimension to the not active dimension
+	const EDimension new_dimension = player->GetDimension() == EDimension::LOWER ? EDimension::UPPER : EDimension::LOWER;
+	player->SetDimension(new_dimension);
+
+	StartTeleportCooldown();
+
+	// For MirrorComponent 
+	just_teleported = true;
 
 	UE_LOG(LogTemp, Warning, TEXT("Teleporting player to position: %s"), *location.ToString());
 }
@@ -94,13 +105,8 @@ bool UTeleportComponent::TryTeleport()
 
 void UTeleportComponent::TraverseDimension()
 {
-	// If we are allowed to teleport, lock the player and start dissolve
 	if (TryTeleport())
-	{
-		const FVector player_pos = player->GetActorLocation();
-		const FVector new_pos = player_pos + FVector(0.0f, 0.0f, (player->GetDimension() == EDimension::LOWER ? teleport_amount : -teleport_amount));
-		Teleport(new_pos);
-	}
+		StartBuildUpTimer();
 	else
 		DenyTeleport();
 }
@@ -118,7 +124,14 @@ void UTeleportComponent::DenyTeleport()
 
 void UTeleportComponent::OnTeleportCooldownEnd()
 {
-	start_dissolve = false;
 	teleport_allowed = true;
 	GetWorld()->GetTimerManager().ClearTimer(teleport_cooldown_handle);
+}
+
+void UTeleportComponent::OnBuildUpEnd()
+{
+	Teleport();
+
+	// Reset timer
+	GetWorld()->GetTimerManager().ClearTimer(teleport_buildup_handle);
 }
