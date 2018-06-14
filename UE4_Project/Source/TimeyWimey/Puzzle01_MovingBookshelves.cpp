@@ -1,5 +1,7 @@
 #include "Puzzle01_MovingBookshelves.h"
 
+#define OUT
+
 APuzzle01_MovingBookshelves::APuzzle01_MovingBookshelves()
 : IsActive(false)
 , SequenceActiveTimer(0.f)
@@ -11,18 +13,27 @@ APuzzle01_MovingBookshelves::APuzzle01_MovingBookshelves()
 	DeltaBookshelfMovement = FVector(100.f, 0.f, 0.f);
 }
 
-// Called when the game starts or when spawned
 void APuzzle01_MovingBookshelves::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
-// Called every frame
 void APuzzle01_MovingBookshelves::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (!IsActive)
+	{
+		return;
+	}
+
+	if (SequenceActiveTimer >= SequenceActiveDuration)
+	{
+		EndSequence();
+	}
+
+	SequenceActiveTimer += DeltaTime;
 }
 
 void APuzzle01_MovingBookshelves::StartSequence()
@@ -34,6 +45,8 @@ void APuzzle01_MovingBookshelves::StartSequence()
 
 	SequenceActiveTimer = 0.f;
 	IsActive = true;
+
+	OpenBookshelves();
 }
 
 void APuzzle01_MovingBookshelves::EndSequence()
@@ -44,14 +57,45 @@ void APuzzle01_MovingBookshelves::EndSequence()
 	}
 
 	IsActive = false;
+
+	CloseBookshelves();
 }
 
 void APuzzle01_MovingBookshelves::OpenBookshelves()
 {
+	TArray<AActor*> AffectedBookshelves;
+	GetBookshelvesAffectedBySequence(OUT AffectedBookshelves);
 
+	for (AActor* Bookshelf : AffectedBookshelves)
+	{
+		FVector& BookshelfLocation = Bookshelf->GetActorLocation();
+		Bookshelf->SetActorLocation(BookshelfLocation + DeltaBookshelfMovement);
+	}
+
+	if (CurrentSequence == 1)
+	{
+			
+	}
 }
 
 void APuzzle01_MovingBookshelves::CloseBookshelves()
 {
+	TArray<AActor*> AffectedBookshelves;
+	GetBookshelvesAffectedBySequence(OUT AffectedBookshelves);
 
+	for (AActor* Bookshelf : AffectedBookshelves)
+	{
+		FVector& BookshelfLocation = Bookshelf->GetActorLocation();
+		Bookshelf->SetActorLocation(BookshelfLocation - DeltaBookshelfMovement);
+	}
+
+	if (CurrentSequence == 1)
+	{
+
+	}
+}
+
+void APuzzle01_MovingBookshelves::GetBookshelvesAffectedBySequence(TArray<AActor*>& OutAffectedBookshelves)
+{
+	OutAffectedBookshelves = (CurrentSequence == 1) ? BookshelvesSequenceOne : BookshelvesSequenceTwo;
 }
