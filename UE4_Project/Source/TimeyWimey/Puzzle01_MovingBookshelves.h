@@ -34,6 +34,8 @@ protected:
 
 private:
 
+	void GetBookshelvesAffectedBySequence(TArray<AActor*>& OutAffectedBookshelves);
+
 	UPROPERTY(EditAnywhere, Category="BookshelfData", DisplayName = "Movement Change")
 	FVector DeltaBookshelfMovement;
 
