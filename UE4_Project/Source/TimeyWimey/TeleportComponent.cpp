@@ -6,6 +6,7 @@
 #include "PlayerFPP_Character.h"
 
 #include "Kismet/GameplayStatics.h"
+#include "Camera/CameraComponent.h"
 
 #include "Public/WorldCollision.h"
 #include "Public/DrawDebugHelpers.h"
@@ -54,7 +55,7 @@ void UTeleportComponent::Teleport(const FVector location)
 	StartTeleportCooldown();
 
 	// For MirrorComponent 
-	just_teleported = true;
+	just_teleported = !just_teleported;
 
 	UE_LOG(LogTemp, Warning, TEXT("Teleporting player to position: %s"), *location.ToString());
 }
@@ -73,14 +74,14 @@ void UTeleportComponent::Teleport()
 	StartTeleportCooldown();
 
 	// For MirrorComponent 
-	just_teleported = true;
+	just_teleported = !just_teleported;
 
 	UE_LOG(LogTemp, Warning, TEXT("Teleporting player to position: %s"), *location.ToString());
 }
 
 bool UTeleportComponent::TryTeleport()
 {
-	if (!teleport_allowed)
+	if (!teleport_ready)
 		return false;
 
 	const EDimension dimension = player->GetDimension();
@@ -106,7 +107,9 @@ bool UTeleportComponent::TryTeleport()
 void UTeleportComponent::TraverseDimension()
 {
 	if (TryTeleport())
+	{
 		StartBuildUpTimer();
+	}
 	else
 		DenyTeleport();
 }
@@ -117,14 +120,14 @@ void UTeleportComponent::DenyTeleport()
 
 	// TODO: Change debug to actual text rendering. AHUD::DrawText
 
-	GetWorld()->GetTimerManager().IsTimerActive(teleport_cooldown_handle) ? 
+	GetWorld()->GetTimerManager().IsTimerActive(teleport_cooldown_handle) ?
 		GEngine->AddOnScreenDebugMessage(-1, 3.0f, color, TEXT("Teleport is cooling down!")) :
 		GEngine->AddOnScreenDebugMessage(-1, 3.0f, color, TEXT("Something is blocking your way"));
 }
 
 void UTeleportComponent::OnTeleportCooldownEnd()
 {
-	teleport_allowed = true;
+	teleport_ready = true;
 	GetWorld()->GetTimerManager().ClearTimer(teleport_cooldown_handle);
 }
 

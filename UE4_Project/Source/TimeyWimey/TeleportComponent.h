@@ -32,7 +32,7 @@ public:
 	bool just_teleported;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		bool teleport_allowed = true;
+		bool teleport_ready = true;
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -58,7 +58,7 @@ private:
 	FORCEINLINE void StartTeleportCooldown()
 	{
 		if (GetWorld()->GetTimerManager().IsTimerActive(teleport_cooldown_handle)) return; // Prevent spam
-		teleport_allowed = false;
+		teleport_ready = false;
 		GetWorld()->GetTimerManager().SetTimer(teleport_cooldown_handle, this, &UTeleportComponent::OnTeleportCooldownEnd, cooldown_timer_length, false);
 	}
 	// End of teleport cooldown
