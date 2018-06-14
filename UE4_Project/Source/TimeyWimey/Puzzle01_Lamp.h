@@ -4,6 +4,8 @@
 #include "GameFramework/Actor.h"
 #include "Puzzle01_Lamp.generated.h"
 
+class APuzzle01_Bookshelf;
+
 UENUM()
 enum class ELampPosition
 {
@@ -15,7 +17,6 @@ enum class ELampPosition
 USTRUCT()
 struct FLampData
 {
-
 	GENERATED_BODY()
 
 	FVector Position;
@@ -94,4 +95,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Lamp Properties")
 	AActor* LampInPresent;
+
+	UPROPERTY(EditAnywhere, Category = "Lamp Properties")
+	APuzzle01_Bookshelf* Bookshelf;
+
+
 };

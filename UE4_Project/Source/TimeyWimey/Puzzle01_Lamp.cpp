@@ -1,5 +1,7 @@
 #include "Puzzle01_Lamp.h"
 
+#include "Puzzle01_Bookshelf.h"
+
 APuzzle01_Lamp::APuzzle01_Lamp()
 : StartPosition(ELampPosition::LAMP_HIGH)
 {
@@ -69,6 +71,14 @@ void APuzzle01_Lamp::SetLampPositions()
 	{
 		SetLampPositionPresent(CurrentPosition);
 	}
+
+	if (Bookshelf)
+	{
+		if (Bookshelf->GetPosition() == (int)EBookshelfPositionPast::BOOKSHELF_LEFT)
+		{
+			Bookshelf->SetBookshelfPositions();
+		}
+	}
 }
 
 void APuzzle01_Lamp::SetLampPositionPresent(int LampIndex)
@@ -86,12 +96,12 @@ void APuzzle01_Lamp::SetLampPositionPast(int LampIndex)
 void APuzzle01_Lamp::SetPresetsDefaultValues()
 {
 	/// Past
-	PastPositionHigh.Set(-7050.f, -170.f, 10575.5f); PastRotationHigh = FRotator(0.f, 0.f, 0.f);
-	PastPositionMiddle.Set(-7950.f, -170.f, 10575.5f); PastRotationMiddle = FRotator(0.f, 0.f, 0.f);
-	PastPositionLow.Set(-8787.f, -170.f, 10575.5f); PastRotationLow = FRotator(0.f, 0.f, 0.f);
+	PastPositionHigh.Set(-7050.f, -459.f, 10828.381836f); PastRotationHigh = FRotator(0.f, 0.f, 0.f);
+	PastPositionMiddle.Set(-7050.f, 450.f, 10508.173828f); PastRotationMiddle = FRotator(0.f, 0.f, 0.f);
+	PastPositionLow.Set(-7050.f, 450.f, 10212.046875f); PastRotationLow = FRotator(0.f, 0.f, 0.f);
 
 	/// Present
-	PresentPositionHigh.Set(-7050.f, 398.87f, 229.6f);  PresentRotationHigh = FRotator(0.f, 0.f, -110.f);
-	PresentPositionMiddle.Set(-7050.f, 406.579132f, 33.823f);  PresentRotationMiddle = FRotator(0.f, 0.f, -90.f);
-	PresentPositionLow.Set(-7050.f, 444.596954f, -169.25676f);  PresentRotationLow = FRotator(0.f, 0.f, -68.f);
+	PresentPositionHigh.Set(-7050.f, 450.f, 1116.252319f);  PresentRotationHigh = FRotator(0.f, 0.f, 0.f);
+	PresentPositionMiddle.Set(-7050.f, 625.359314f, 191.996323f);  PresentRotationMiddle = FRotator(0.f, 0.f, -90.f);
+	PresentPositionLow.Set(-7050.f, 612.970093f, -80.492676f);  PresentRotationLow = FRotator(0.f, 0.f, -110.f);
 }
