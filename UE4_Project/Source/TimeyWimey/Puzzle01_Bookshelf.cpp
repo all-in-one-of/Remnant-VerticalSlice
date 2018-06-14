@@ -77,15 +77,15 @@ void APuzzle01_Bookshelf::SetBookshelfPositions()
 			{
 				if (Lamp->GetPosition() == (int)ELampPosition::LAMP_HIGH)
 				{
-					SetBookshelfPositionPresent((int)EBookshelfPositionPresent::BOOKSHELF_LEFT_HIGH);
+					SetBookshelfPositionPresent((int)EBookshelfPositionPresent::BOOKSHELF_LEFT_LOW);
 				}
 				else if (Lamp->GetPosition() == (int)ELampPosition::LAMP_MIDDLE)
 				{
-					SetBookshelfPositionPresent((int)EBookshelfPositionPresent::BOOKSHELF_LEFT_MIDDLE);
+					SetBookshelfPositionPresent((int)EBookshelfPositionPresent::BOOKSHELF_LEFT_HIGH);
 				}
 				else if (Lamp->GetPosition() == (int)ELampPosition::LAMP_LOW)
 				{
-					SetBookshelfPositionPresent((int)EBookshelfPositionPresent::BOOKSHELF_LEFT_LOW);
+					SetBookshelfPositionPresent((int)EBookshelfPositionPresent::BOOKSHELF_LEFT_MIDDLE);
 				}
 			}
 			else

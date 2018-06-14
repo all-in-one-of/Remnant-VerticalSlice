@@ -50,6 +50,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void MoveLeft();
 
+	int GetPosition() { return CurrentPosition; }
+
+	void SetBookshelfPositions();
+
 protected:
 
 	virtual void BeginPlay() override;
@@ -59,7 +63,7 @@ private:
 	static const int NUM_POS_PRESETS_PAST = 3;
 	static const int NUM_POS_PRESETS_PRESENT = 5;
 
-	void SetBookshelfPositions();
+	
 	void SetBookshelfPositionPast(int BookshelfIndex);
 	void SetBookshelfPositionPresent(int BookshelfIndex);
 	void SetStartValueBookshelfDataPresent(int BookshelfIndex, FVector Pos, FRotator Rot);
