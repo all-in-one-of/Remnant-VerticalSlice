@@ -14,7 +14,10 @@ public:
 	APuzzle01_Machine();
 
 	UFUNCTION(BlueprintCallable)
-	void StartMachine() { IsStarted = true; }
+	bool IsMachineStarted() { return IsStarted; }
+
+	UFUNCTION(BlueprintCallable)
+	void StartMachine();
 
 	UFUNCTION(BlueprintCallable)
 	void ChangeSetting();
@@ -28,6 +31,11 @@ protected:
 
 private:
 
-	UPROPERTY(VisibleAnywhere, Category="Machine Properties")
 	bool IsStarted;
+
+	UPROPERTY(EditAnywhere, Category = "Machine Properties", DisplayName = "Lamp")
+	AActor* Lamp;
+
+	UPROPERTY(EditAnywhere, Category = "Machine Properties", DisplayName = "Lamp Buttons Pos Offset")
+	FVector LampOffset;
 };
