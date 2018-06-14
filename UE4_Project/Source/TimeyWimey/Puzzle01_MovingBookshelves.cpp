@@ -68,7 +68,7 @@ void APuzzle01_MovingBookshelves::OpenBookshelves()
 
 	for (AActor* Bookshelf : AffectedBookshelves)
 	{
-		FVector& BookshelfLocation = Bookshelf->GetActorLocation();
+		FVector BookshelfLocation = Bookshelf->GetActorLocation();
 		Bookshelf->SetActorLocation(BookshelfLocation + DeltaBookshelfMovement);
 	}
 
@@ -85,7 +85,7 @@ void APuzzle01_MovingBookshelves::CloseBookshelves()
 
 	for (AActor* Bookshelf : AffectedBookshelves)
 	{
-		FVector& BookshelfLocation = Bookshelf->GetActorLocation();
+		FVector BookshelfLocation = Bookshelf->GetActorLocation();
 		Bookshelf->SetActorLocation(BookshelfLocation - DeltaBookshelfMovement);
 	}
 
