@@ -45,6 +45,12 @@ private:
 	UPROPERTY(EditAnywhere, Category = "SequenceData", DisplayName = "Actors, Sequence 2")
 	TArray<AActor*> BookshelvesSequenceTwo;
 
+	UPROPERTY(EditAnywhere, Category = "FinishDoor", DisplayName = "Door Pointer")
+	AActor* FinishDoor;
+
+	UPROPERTY(EditAnywhere, Category = "FinishDoor", DisplayName = "Door Open Pos Offset")
+	FVector FinishDoorOffset;
+
 	UPROPERTY(EditAnywhere, Category = "SequenceData", DisplayName = "Sequence active length")
 	float SequenceActiveDuration;
 
