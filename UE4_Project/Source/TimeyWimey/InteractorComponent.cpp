@@ -9,45 +9,65 @@
 #include "PickupActor.h"
 #include "InteractComponent.h"
 #include "InventoryComponent.h"
+#include "PlayerFPP_Character.h"
 
 #define OUT
 
 UInteractorComponent::UInteractorComponent()
-: InteractRange(200.f)
+: InteractRange(350.f)
 {
+	PrimaryComponentTick.bCanEverTick = true;
 
 }
 
 void UInteractorComponent::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	player = Cast<APlayerFPP_Character>(GetOwner());
+	if (!player)
+		UE_LOG(LogTemp, Error, TEXT("Failed to get player!"))
+}
+
+FHitResult UInteractorComponent::LineTrace()
+{
+	UWorld* world = GetWorld();
+
+	FVector vp_location;
+	FRotator vp_rotation;
+	world->GetFirstPlayerController()->GetPlayerViewPoint(OUT vp_location, OUT vp_rotation);
+
+	FHitResult hit_result;
+	FVector trace_start = vp_location;
+	FVector trace_end = vp_location + vp_rotation.Vector() * InteractRange;
+	FCollisionQueryParams query_params(TEXT(""), false, player);
+
+	world->LineTraceSingleByObjectType(OUT hit_result, trace_start, trace_end, ECC_GameTraceChannel1, query_params);
+
+	return hit_result;
+}
+
+void UInteractorComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction * ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	FHitResult hit = LineTrace();
+	if (hit.GetActor())
+	{
+		looking_at_object.Broadcast(hit.GetActor());
+		trace_hit.Broadcast(true);
+	}
+	else
+		trace_hit.Broadcast(false);
+
 }
 
 void UInteractorComponent::AttemptInteract()
 {
-	UWorld* World = GetWorld();
-
-	FVector PlayerViewPointLocation;
-	FRotator PlayerViewPointRotation;
-	World->GetFirstPlayerController()->GetPlayerViewPoint(OUT PlayerViewPointLocation, OUT PlayerViewPointRotation);
-
-	FHitResult HitResult;
-	FVector LineStart = PlayerViewPointLocation;
-	FVector LineEnd = PlayerViewPointLocation + PlayerViewPointRotation.Vector() * InteractRange;
-	FCollisionObjectQueryParams CollisionObjectQueryParams(ECC_WorldDynamic);
-	FCollisionQueryParams CollisionQueryParams(TEXT(""), false, GetOwner());
-
-	GetWorld()->LineTraceSingleByObjectType(
-		OUT HitResult,
-		LineStart,
-		LineEnd,
-		CollisionObjectQueryParams,
-		CollisionQueryParams
-	);
-
-	if (HitResult.GetActor())
+	FHitResult hit = LineTrace();
+	if (hit.GetActor())
 	{
-		AInteractableActor* InteractableActor = Cast<AInteractableActor>(HitResult.GetActor());
+		AInteractableActor* InteractableActor = Cast<AInteractableActor>(hit.GetActor());
 
 		if (InteractableActor)
 		{
