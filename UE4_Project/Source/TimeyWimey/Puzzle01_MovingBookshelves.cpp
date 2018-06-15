@@ -72,9 +72,9 @@ void APuzzle01_MovingBookshelves::OpenBookshelves()
 		Bookshelf->SetActorLocation(BookshelfLocation + DeltaBookshelfMovement);
 	}
 
-	if (CurrentSequence == 1)
+	if (CurrentSequence == 1 && FinishDoor)
 	{
-			
+		FinishDoor->SetActorLocation(FinishDoor->GetActorLocation() + FinishDoorOffset);
 	}
 }
 
@@ -89,9 +89,9 @@ void APuzzle01_MovingBookshelves::CloseBookshelves()
 		Bookshelf->SetActorLocation(BookshelfLocation - DeltaBookshelfMovement);
 	}
 
-	if (CurrentSequence == 1)
+	if (CurrentSequence == 1 && FinishDoor)
 	{
-
+		FinishDoor->SetActorLocation(FinishDoor->GetActorLocation() - FinishDoorOffset);
 	}
 }
 
