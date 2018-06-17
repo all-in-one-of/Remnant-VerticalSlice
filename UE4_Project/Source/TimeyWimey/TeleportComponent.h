@@ -36,7 +36,7 @@ public:
 
 private:
 	UPROPERTY(EditAnywhere)
-		float teleport_amount = 10000.0f;
+		float teleport_amount = 10010.0f;
 
 	UPROPERTY(EditAnywhere)
 		float trace_length = 10500.0f;
