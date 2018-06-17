@@ -38,9 +38,9 @@ FHitResult UInteractorComponent::LineTrace()
 	world->GetFirstPlayerController()->GetPlayerViewPoint(OUT vp_location, OUT vp_rotation);
 
 	FHitResult hit_result;
-	FVector trace_start = vp_location;
-	FVector trace_end = vp_location + vp_rotation.Vector() * InteractRange;
-	FCollisionQueryParams query_params(TEXT(""), false, player);
+	const FVector trace_start = vp_location;
+	const FVector trace_end = vp_location + vp_rotation.Vector() * InteractRange;
+	const FCollisionQueryParams query_params(TEXT(""), false, player);
 
 	world->LineTraceSingleByObjectType(OUT hit_result, trace_start, trace_end, ECC_GameTraceChannel1, query_params);
 
@@ -67,7 +67,7 @@ void UInteractorComponent::AttemptInteract()
 	FHitResult hit = LineTrace();
 	if (hit.GetActor())
 	{
-		AInteractableActor* InteractableActor = Cast<AInteractableActor>(hit.GetActor());
+		const AInteractableActor* InteractableActor = Cast<AInteractableActor>(hit.GetActor());
 
 		if (InteractableActor)
 		{
@@ -79,10 +79,11 @@ void UInteractorComponent::AttemptInteract()
 				if (InteractableActor->GetInteractableType() == EInteractableType::INTERACTABLE_PICK_UP)
 				{
 					UInventoryComponent* Inventory = GetOwner()->FindComponentByClass<UInventoryComponent>();
-					APickUpActor* PickUp = Cast<APickUpActor>(InteractableActor);
+					const APickUpActor* PickUp = Cast<APickUpActor>(InteractableActor);
 
 					if (Inventory && PickUp)
 					{
+						on_pickup.Broadcast();
 						Inventory->AddItem(PickUp->GetName());
 						InteractComponent->RequestInteract();
 					}

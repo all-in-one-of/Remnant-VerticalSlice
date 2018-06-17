@@ -12,6 +12,7 @@ class AInteractableActor;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FLookingAtObject, AActor*, actor);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FTraceHit, bool, trace);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPickup);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TIMEYWIMEY_API UInteractorComponent : public UActorComponent
@@ -31,6 +32,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FTraceHit trace_hit;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnPickup on_pickup;
 
 protected:
 	
