@@ -72,11 +72,7 @@ void APlayerFPP_Character::MoveForward(float Value)
 	if (Value != 0.0f)
 	{
 		AddMovementInput(GetActorForwardVector(), Value);
-		// TODO:
-		// Implement footsteps
-		// Broadcast is moving true
 	}
-	// else broadcast is moving false
 }
 
 void APlayerFPP_Character::MoveRight(float Value)

@@ -20,6 +20,7 @@ enum class EDimension
 	UPPER
 };
 
+
 UCLASS(config=Game)
 class APlayerFPP_Character : public ACharacter
 {
@@ -36,7 +37,7 @@ public:
 	// Returns FirstPersonCameraComponent sub object
 	FORCEINLINE class UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
-	const EDimension GetDimension() { return dimension; }
+	EDimension GetDimension() const { return dimension; }
 	void SetDimension(EDimension new_dimension) { dimension = new_dimension; }
 
 	FORCEINLINE bool GetIsFalling() const { return this->GetMovementComponent()->IsFalling(); }
