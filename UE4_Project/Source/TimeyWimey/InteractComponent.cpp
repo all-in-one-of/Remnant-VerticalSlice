@@ -17,4 +17,5 @@ void UInteractComponent::BeginPlay()
 void UInteractComponent::RequestInteract()
 {
 	OnInteractRequest.Broadcast();
+	UE_LOG(LogTemp, Warning, TEXT("Broadcast Succesful"))
 }

@@ -119,14 +119,14 @@ void APuzzle01_Bookshelf::SetBookshelfPositionPast(int BookshelfIndex)
 void APuzzle01_Bookshelf::SetPresetsDefaultValues()
 {
 		/// Past
-		PastPositionLeft.Set(-7050.f, -170.f, 10575.5f); PastRotationLeft = FRotator(0.f, 0.f, 0.f);
-		PastPositionMiddle.Set(-7950.f, -170.f, 10575.5f); PastRotationMiddle = FRotator(0.f, 0.f, 0.f);
-		PastPositionRight.Set(-8787.f, -170.f, 10575.5f); PastRotationRight = FRotator(0.f, 0.f, 0.f);
+		PastPositionLeft.Set(-7050.f, -170.f, 10000.f); PastRotationLeft = FRotator(0.f, 180.f, 0.f);
+		PastPositionMiddle.Set(-7950.f, -170.f, 10000.f); PastRotationMiddle = FRotator(0.f, 180.f, 0.f);
+		PastPositionRight.Set(-8787.f, -170.f, 10000.f); PastRotationRight = FRotator(0.f, 180.f, 0.f);
 
 		/// Present
-		PresentPositionLeftHigh.Set(-7050.f, 398.87f, 229.6f);  PresentRotationLeftHigh = FRotator(0.f, 0.f, -110.f);
-		PresentPositionLeftMiddle.Set(-7050.f, 406.579132f, 33.823f);  PresentRotationLeftMiddle = FRotator(0.f, 0.f, -90.f);
-		PresentPositionLeftLow.Set(-7050.f, 444.596954f, -169.25676f);  PresentRotationLeftLow = FRotator(0.f, 0.f, -68.f);
-		PresentPositionMiddle.Set(-7950.f, 480.f, 34.f);  PresentRotationMiddle = FRotator(5.f, 0.f, 84.262581f);
-		PresentPositionRight.Set(-8787.313477f, 458.825592f, -134.042709f);  PresentRotationRight = FRotator(0.f, 0.f, -68.0f);
+		PresentPositionLeftHigh.Set(-7050.f, 942.65f, 370.9f);  PresentRotationLeftHigh = FRotator(0.f, 0.f, -110.f);
+		PresentPositionLeftMiddle.Set(-7050.f, 1000.f, 2.5f);  PresentRotationLeftMiddle = FRotator(0.f, 0.f, -90.f);
+		PresentPositionLeftLow.Set(-7050.f, 900.15f, -410.f);  PresentRotationLeftLow = FRotator(0.f, 0.f, -68.f);
+		PresentPositionMiddle.Set(-7950.f, -130.f, 30.f);  PresentRotationMiddle = FRotator(-5.f, 180.f, -96.f);
+		PresentPositionRight.Set(-8771.668945f, 922.4f, -423.f);  PresentRotationRight = FRotator(0.f, 0.f, -68.0f);
 }

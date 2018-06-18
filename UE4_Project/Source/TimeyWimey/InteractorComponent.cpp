@@ -51,33 +51,37 @@ void UInteractorComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	FHitResult hit = LineTrace();
+	/*FHitResult hit = LineTrace();
 	if (hit.GetActor())
 	{
 		looking_at_object.Broadcast(hit.GetActor());
 		trace_hit.Broadcast(true);
 	}
 	else
-		trace_hit.Broadcast(false);
+		trace_hit.Broadcast(false);*/
 
 }
 
 void UInteractorComponent::AttemptInteract()
 {
+	UE_LOG(LogTemp, Error, TEXT("A"))
 	FHitResult hit = LineTrace();
 	if (hit.GetActor())
 	{
+		UE_LOG(LogTemp, Error, TEXT("B"))
 		const AInteractableActor* InteractableActor = Cast<AInteractableActor>(hit.GetActor());
 
 		if (InteractableActor)
 		{
+			UE_LOG(LogTemp, Error, TEXT("C"))
 			UInteractComponent* InteractComponent = InteractableActor->FindComponentByClass<UInteractComponent>();
 
 			if (InteractComponent)
 			{
+				UE_LOG(LogTemp, Error, TEXT("D"))
 				/// Add to inventory
 				if (InteractableActor->GetInteractableType() == EInteractableType::INTERACTABLE_PICK_UP)
-				{
+				{				
 					UInventoryComponent* Inventory = GetOwner()->FindComponentByClass<UInventoryComponent>();
 					const APickUpActor* PickUp = Cast<APickUpActor>(InteractableActor);
 
@@ -89,7 +93,8 @@ void UInteractorComponent::AttemptInteract()
 					}
 				}
 				else
-				{
+				{	
+					UE_LOG(LogTemp, Error, TEXT("E"))
 					InteractComponent->RequestInteract();
 				}
 			}
