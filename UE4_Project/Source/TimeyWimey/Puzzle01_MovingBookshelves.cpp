@@ -74,7 +74,6 @@ void APuzzle01_MovingBookshelves::OpenBookshelves()
 
 	if (CurrentSequence == 2 && FinishDoor)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("I hate UE4"))
 		FinishDoor->SetActorLocation(FinishDoor->GetActorLocation() + FinishDoorOffset);
 	}
 }

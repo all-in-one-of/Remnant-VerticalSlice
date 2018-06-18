@@ -56,8 +56,6 @@ void UTeleportComponent::Teleport(const FVector location)
 
 	// For MirrorComponent 
 	just_teleported = !just_teleported;
-
-	UE_LOG(LogTemp, Warning, TEXT("Teleporting player to position: %s"), *location.ToString());
 }
 
 void UTeleportComponent::Teleport()
@@ -75,8 +73,6 @@ void UTeleportComponent::Teleport()
 
 	// For MirrorComponent 
 	just_teleported = !just_teleported;
-
-	UE_LOG(LogTemp, Warning, TEXT("Teleporting player to position: %s"), *location.ToString());
 }
 
 bool UTeleportComponent::TryTeleport()

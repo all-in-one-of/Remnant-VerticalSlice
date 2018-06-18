@@ -35,8 +35,6 @@ void APuzzle01_Machine::StartMachine()
 {
 	IsStarted = true;
 
-	UE_LOG(LogTemp, Warning, TEXT("Started Machine"))
-
 	if (Lamp)
 	{
 		Lamp->SetActorLocation(Lamp->GetActorLocation() + LampOffset);	

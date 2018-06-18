@@ -64,21 +64,17 @@ void UInteractorComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 
 void UInteractorComponent::AttemptInteract()
 {
-	UE_LOG(LogTemp, Error, TEXT("A"))
 	FHitResult hit = LineTrace();
 	if (hit.GetActor())
 	{
-		UE_LOG(LogTemp, Error, TEXT("B"))
 		const AInteractableActor* InteractableActor = Cast<AInteractableActor>(hit.GetActor());
 
 		if (InteractableActor)
 		{
-			UE_LOG(LogTemp, Error, TEXT("C"))
 			UInteractComponent* InteractComponent = InteractableActor->FindComponentByClass<UInteractComponent>();
 
 			if (InteractComponent)
 			{
-				UE_LOG(LogTemp, Error, TEXT("D"))
 				/// Add to inventory
 				if (InteractableActor->GetInteractableType() == EInteractableType::INTERACTABLE_PICK_UP)
 				{				
@@ -94,7 +90,6 @@ void UInteractorComponent::AttemptInteract()
 				}
 				else
 				{	
-					UE_LOG(LogTemp, Error, TEXT("E"))
 					InteractComponent->RequestInteract();
 				}
 			}
